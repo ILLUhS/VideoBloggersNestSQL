@@ -1,13 +1,13 @@
-import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
-import { JwtService } from "@nestjs/jwt";
-import { v4 as uuidv4 } from "uuid";
-import * as bcrypt from "bcrypt";
-import { RefreshTokenMetasRepository } from "../../ifrastructure/repositories/refresh.token.metas.repository";
-import { UserDocument } from "../../../../domain/schemas/user.schema";
-import { MailerService } from "@nestjs-modules/mailer";
-import { PasswordRecoveriesRepository } from "../../ifrastructure/repositories/password-recoveries.repository";
-import { PasswordRecoveryDocument } from "../../../../domain/schemas/password-recovery.schema";
-import { UsersRepository } from "../../ifrastructure/repositories/users.repository";
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
+import { v4 as uuidv4 } from 'uuid';
+import * as bcrypt from 'bcrypt';
+import { RefreshTokenMetasRepository } from '../../ifrastructure/repositories/refresh.token.metas.repository';
+import { User, UserDocument } from '../../../../domain/schemas/user.schema';
+import { MailerService } from '@nestjs-modules/mailer';
+import { PasswordRecoveriesRepository } from '../../ifrastructure/repositories/password-recoveries.repository';
+import { PasswordRecoveryDocument } from '../../../../domain/schemas/password-recovery.schema';
+import { UsersRepository } from '../../ifrastructure/repositories/users.repository';
 
 @Injectable()
 export class AuthService {
@@ -84,7 +84,7 @@ export class AuthService {
     if (!confirmed) return null;
     return user.passwordHash === passwordHash ? user : null;
   }
-  async sendConfirmEmail(user: UserDocument) {
+  async sendConfirmEmail(user: User) {
     //const urlConfirmAddress = `https://video-bloggers-nest.app/confirm-email?code=`;
     const link = `https://video-bloggers.vercel.app/confirm-email?code=${user.emailConfirmationCode}`;
     // Отправка почты

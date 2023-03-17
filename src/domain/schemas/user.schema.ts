@@ -3,6 +3,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { v4 as uuidv4 } from 'uuid';
 import { add } from 'date-fns';
 import { UserCreateDtoType } from '../../modules/public/application/types/user.create.dto.type';
+import { Injectable } from '@nestjs/common';
 
 export type UserDocument = HydratedDocument<User>;
 
@@ -24,8 +25,20 @@ export type UserModelType = Model<UserDocument> &
   UserModelMethods &
   UserModelStaticMethods;
 
+@Injectable()
 @Schema()
 export class User {
+  constructor(private userDto: UserCreateDtoType) {
+    this.login = userDto.login;
+    this.passwordHash = userDto.passwordHash;
+    this.email = userDto.email;
+    this.createdAt = new Date().toISOString();
+    this.emailConfirmationCode = uuidv4();
+    this.emailExpirationTime = add(new Date(), { hours: 24 });
+    this.emailIsConfirmed = false;
+    this.isBanned = false;
+  }
+
   @Prop({ required: true })
   id: string;
 
@@ -88,7 +101,6 @@ export class User {
     this.banDate = null;
     this.banReason = null;
   }
-
   static async makeInstance(
     userDto: UserCreateDtoType,
     UserModel: UserModelType,
