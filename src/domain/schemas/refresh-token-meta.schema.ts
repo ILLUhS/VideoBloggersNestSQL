@@ -1,6 +1,6 @@
 import { HydratedDocument, Model } from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { RefreshTokenMetaCreateDto } from '../../modules/auth/types/refresh.token.meta.create.dto';
+import { RefreshTokenMetaCreateDtoType } from '../../modules/auth/types/refresh-token-meta-create-dto.type';
 import { RefreshTokenMetaUpdateDto } from '../../modules/auth/types/refresh.token.meta.update.dto';
 
 export type RefreshTokenMetaDocument = HydratedDocument<RefreshTokenMeta>;
@@ -10,7 +10,7 @@ export type RefreshTokenMetaModelMethods = {
 };
 export type RefreshTokenMetaModelStaticMethods = {
   makeInstance(
-    refreshTokenMetaModelDto: RefreshTokenMetaCreateDto,
+    refreshTokenMetaModelDto: RefreshTokenMetaCreateDtoType,
     RefreshTokenMetaModel: RefreshTokenMetaModelType,
   ): RefreshTokenMetaDocument;
 };
@@ -20,6 +20,17 @@ export type RefreshTokenMetaModelType = Model<RefreshTokenMetaDocument> &
 
 @Schema()
 export class RefreshTokenMeta {
+  constructor(refreshTokenMetaDto: RefreshTokenMetaCreateDtoType) {
+    this.issuedAt = refreshTokenMetaDto.issuedAt;
+    this.expirationAt = refreshTokenMetaDto.expirationAt;
+    this.deviceId = refreshTokenMetaDto.deviceId;
+    this.deviceIp = refreshTokenMetaDto.deviceIp;
+    this.deviceName = refreshTokenMetaDto.deviceName;
+    this.userId = refreshTokenMetaDto.userId;
+  }
+
+  id: number;
+
   @Prop({ required: true })
   issuedAt: number;
 
@@ -36,10 +47,10 @@ export class RefreshTokenMeta {
   deviceName: string;
 
   @Prop({ required: true })
-  userId: string;
+  userId: number;
 
   static makeInstance(
-    refreshTokenMetaCreateDto: RefreshTokenMetaCreateDto,
+    refreshTokenMetaCreateDto: RefreshTokenMetaCreateDtoType,
     RefreshTokenMetaModel: RefreshTokenMetaModelType,
   ): RefreshTokenMetaDocument {
     return new RefreshTokenMetaModel(refreshTokenMetaCreateDto);

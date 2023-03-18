@@ -1,8 +1,8 @@
-import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
-import { LoginCommand } from "./commands/login.command";
-import { RefreshTokenMetasRepository } from "../../../ifrastructure/repositories/refresh.token.metas.repository";
-import { AuthService } from "../../services/auth.service";
-import { TokensType } from "../../types/tokens.type";
+import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
+import { LoginCommand } from './commands/login.command';
+import { RefreshTokenMetasRepository } from '../../../ifrastructure/repositories/refresh.token.metas.repository';
+import { AuthService } from '../../services/auth.service';
+import { TokensType } from '../../types/tokens.type';
 
 @CommandHandler(LoginCommand)
 export class LoginUseCase implements ICommandHandler<LoginCommand> {
@@ -19,7 +19,7 @@ export class LoginUseCase implements ICommandHandler<LoginCommand> {
       login,
     );
     const getPayload = await this.authService.getPayload(refreshToken);
-    const refreshTokenMeta = await this.refreshTokenMetaRepository.create({
+    await this.refreshTokenMetaRepository.create({
       issuedAt: getPayload.iat,
       expirationAt: getPayload.exp,
       deviceId: getPayload.deviceId,
@@ -27,7 +27,6 @@ export class LoginUseCase implements ICommandHandler<LoginCommand> {
       deviceName: deviceName,
       userId: getPayload.userId,
     });
-    await this.refreshTokenMetaRepository.save(refreshTokenMeta);
     return { accessToken, refreshToken };
   }
 }

@@ -5,23 +5,48 @@ import {
   RefreshTokenMetaDocument,
   RefreshTokenMetaModelType,
 } from '../../../../domain/schemas/refresh-token-meta.schema';
-import { RefreshTokenMetaCreateDto } from '../../types/refresh.token.meta.create.dto';
+import { RefreshTokenMetaCreateDtoType } from '../../types/refresh-token-meta-create-dto.type';
+import { DataSource } from 'typeorm';
 
 @Injectable()
 export class RefreshTokenMetasRepository {
   constructor(
+    protected dataSource: DataSource,
     @InjectModel(RefreshTokenMeta.name)
     private refreshTokenMetaModel: RefreshTokenMetaModelType,
   ) {}
 
   async create(
-    refreshTokenMetaModelDto: RefreshTokenMetaCreateDto,
+    refreshTokenMetaDto: RefreshTokenMetaCreateDtoType,
+  ): Promise<number> {
+    const result = await this.dataSource.query(
+      `INSERT INTO public."RefreshTokenMetas"(
+                "issuedAt",
+                "expirationAt", 
+                "deviceId", 
+                "deviceIp", 
+                "deviceName", 
+                "userId")
+                VALUES ($1, $2, $3, $4, $5, $6) RETURNING "id";`,
+      [
+        refreshTokenMetaDto.issuedAt,
+        refreshTokenMetaDto.expirationAt,
+        refreshTokenMetaDto.deviceId,
+        refreshTokenMetaDto.deviceIp,
+        refreshTokenMetaDto.deviceName,
+        refreshTokenMetaDto.userId,
+      ],
+    );
+    return result[0].id;
+  }
+  /*async create(
+    refreshTokenMetaDto: RefreshTokenMetaCreateDtoType,
   ): Promise<RefreshTokenMetaDocument> {
     return this.refreshTokenMetaModel.makeInstance(
-      refreshTokenMetaModelDto,
+      refreshTokenMetaDto,
       this.refreshTokenMetaModel,
     );
-  }
+  }*/
   async find(
     issuedAt: number,
     deviceId: string,

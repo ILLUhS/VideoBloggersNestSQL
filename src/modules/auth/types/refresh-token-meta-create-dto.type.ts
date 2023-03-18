@@ -1,8 +1,8 @@
-export class RefreshTokenMetaCreateDto {
+export type RefreshTokenMetaCreateDtoType = {
   issuedAt: number;
   expirationAt: number;
   deviceId: string;
   deviceIp: string;
   deviceName: string;
-  userId: string;
-}
+  userId: number;
+};

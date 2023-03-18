@@ -21,10 +21,6 @@ export class PassRecoveryUseCase
     if (!user) return false;
     let passRec = await this.passRecRepository.findByField('userId', user.id);
     if (!passRec) {
-      /*passRec = await this.passRecRepository.create({
-        userId: user.id,
-        email: email,
-      });*/
       passRec = new PasswordRecovery({
         userId: user.id,
         email: email,
