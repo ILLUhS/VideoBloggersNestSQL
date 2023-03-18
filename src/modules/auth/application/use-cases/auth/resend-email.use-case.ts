@@ -12,12 +12,12 @@ export class ResendEmailUseCase implements ICommandHandler<ResendEmailCommand> {
 
   async execute(command: ResendEmailCommand): Promise<boolean> {
     const { email } = command;
-    const user = await this.usersRepository.findByField('email', email);
+    const user = await this.usersRepository.findByField1('email', email);
     if (!user) return false;
     await user.updEmailCode();
     if (await user.getEmailIsConfirmed()) return false;
     await this.authService.sendConfirmEmail(user);
-    await this.usersRepository.save(user);
+    await this.usersRepository.update(user);
     return true;
   }
 }

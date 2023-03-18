@@ -17,8 +17,6 @@ export class ConfirmRegistrationUseCase
     if (!user) return false;
     const result = await user.confirmEmail();
     if (!result) return false;
-    const result1 = await this.usersRepository.update(user);
-    console.log(result1);
-    return result1;
+    return await this.usersRepository.update(user);
   }
 }

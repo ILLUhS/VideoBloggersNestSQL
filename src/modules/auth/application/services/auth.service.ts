@@ -6,7 +6,7 @@ import { RefreshTokenMetasRepository } from '../../ifrastructure/repositories/re
 import { User, UserDocument } from '../../../../domain/schemas/user.schema';
 import { MailerService } from '@nestjs-modules/mailer';
 import { PasswordRecoveriesRepository } from '../../ifrastructure/repositories/password-recoveries.repository';
-import { PasswordRecoveryDocument } from '../../../../domain/schemas/password-recovery.schema';
+import { PasswordRecovery } from '../../../../domain/schemas/password-recovery.schema';
 import { UsersRepository } from '../../ifrastructure/repositories/users.repository';
 
 @Injectable()
@@ -114,7 +114,7 @@ export class AuthService {
         );
       });
   }
-  async sendRecoveryEmail(passRec: PasswordRecoveryDocument) {
+  async sendRecoveryEmail(passRec: PasswordRecovery) {
     //const urlConfirmAddress = `https://video-bloggers-nest.app/password-recovery?recoveryCode=`;
     const link = `https://video-bloggers.vercel.app/password-recovery?recoveryCode=${passRec.recoveryCode}`;
     // Отправка почты

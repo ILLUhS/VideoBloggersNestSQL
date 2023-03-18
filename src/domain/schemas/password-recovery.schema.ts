@@ -1,10 +1,9 @@
-import { HydratedDocument, Model } from "mongoose";
-import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import { v4 as uuidv4 } from "uuid";
-import { add } from "date-fns";
-import {
-  PasswordRecoveryCreateDtoType
-} from "../../modules/public/application/types/password.recovery.create.dto.type";
+import { HydratedDocument, Model } from 'mongoose';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { v4 as uuidv4 } from 'uuid';
+import { add } from 'date-fns';
+import { PassRecCreateDtoType } from '../../modules/public/application/types/passRecCreateDtoType';
+import { FoundPassRecDtoType } from '../../modules/auth/types/found-pass-rec-dto.type';
 
 export type PasswordRecoveryDocument = HydratedDocument<PasswordRecovery>;
 
@@ -14,7 +13,7 @@ export type PasswordRecoveryModelMethods = {
 };
 export type PasswordRecoveryModelStaticMethods = {
   makeInstance(
-    PasswordRecoveryDto: PasswordRecoveryCreateDtoType,
+    PasswordRecoveryDto: PassRecCreateDtoType,
     PasswordRecoveryModel: PasswordRecoveryModelType,
   ): Promise<PasswordRecoveryDocument>;
 };
@@ -24,8 +23,16 @@ export type PasswordRecoveryModelType = Model<PasswordRecoveryDocument> &
 
 @Schema()
 export class PasswordRecovery {
+  constructor(private passRecDto: PassRecCreateDtoType) {
+    this.userId = passRecDto.userId;
+    this.email = passRecDto.email;
+    this.recoveryCode = uuidv4();
+    this.expirationTime = add(new Date(), { hours: 24 });
+    this.isUsed = false;
+    this.createdAt = new Date().toISOString();
+  }
   @Prop({ required: true })
-  userId: string;
+  userId: number;
 
   @Prop({ required: true })
   email: string;
@@ -55,7 +62,7 @@ export class PasswordRecovery {
   }
 
   static async makeInstance(
-    PasswordRecoveryDto: PasswordRecoveryCreateDtoType,
+    PasswordRecoveryDto: PassRecCreateDtoType,
     PasswordRecoveryModel: PasswordRecoveryModelType,
   ): Promise<PasswordRecoveryDocument> {
     return new PasswordRecoveryModel({
@@ -66,6 +73,15 @@ export class PasswordRecovery {
       isUsed: false,
       createdAt: new Date().toISOString(),
     });
+  }
+
+  async setAll(passRecDto: FoundPassRecDtoType) {
+    this.userId = passRecDto.userId;
+    this.email = passRecDto.email;
+    this.recoveryCode = passRecDto.recoveryCode;
+    this.expirationTime = passRecDto.expirationTime;
+    this.isUsed = passRecDto.isUsed;
+    this.createdAt = passRecDto.createdAt;
   }
 }
 

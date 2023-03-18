@@ -38,7 +38,7 @@ export class UsersRepository {
       ],
     );
   }
-  async findByField1(field: string, value: string): Promise<User | null> {
+  async findByField1(field: string, value: any): Promise<User | null> {
     const foundUser = await this.dataSource.query(
       `SELECT
                 "id",
@@ -102,7 +102,7 @@ export class UsersRepository {
   /*async create(userDto: UserCreateDtoType): Promise<UserDocument> {
     return await this.userModel.makeInstance(userDto, this.userModel);
   }*/
-  async findById(id: string): Promise<UserDocument | null> {
+  async findById(id: any): Promise<UserDocument | null> {
     return this.userModel.findOne({ id: id });
   }
   async findByField(

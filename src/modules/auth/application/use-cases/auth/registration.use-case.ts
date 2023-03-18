@@ -21,14 +21,8 @@ export class RegistrationUseCase
       email,
       passwordHash,
     });
-    /*const user = await this.usersRepository.create({
-      login: login,
-      passwordHash: passwordHash,
-      email: email,
-    });*/
-    //await this.authService.sendConfirmEmail(user);
+    await this.authService.sendConfirmEmail(user);
     this.usersRepository.create(user);
-    //await this.usersRepository.save(user);
     return;
   }
 }
