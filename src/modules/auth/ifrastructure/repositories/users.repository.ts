@@ -38,11 +38,8 @@ export class UsersRepository {
       ],
     );
   }
-  async findByField(
-    field: string,
-    value: string,
-  ): Promise<UserDocument | null> {
-    const user = await this.dataSource.query(
+  async findByField1(field: string, value: string): Promise<User | null> {
+    const foundUser = await this.dataSource.query(
       `SELECT
                 "id",
                 "login", 
@@ -59,8 +56,44 @@ export class UsersRepository {
                 WHERE "${field}" = $1;`,
       [value],
     );
-    console.log(user[0]);
-    return this.userModel.findOne({ [field]: value });
+    const user = new User({
+      login: foundUser[0].login,
+      passwordHash: foundUser[0].passwordHash,
+      email: foundUser[0].email,
+    });
+    await user.setAll(foundUser[0]);
+    return user;
+  }
+  async update(user: User): Promise<boolean> {
+    const result = await this.dataSource.query(
+      `UPDATE public."Users"
+                SET 
+                "login"=$2, 
+                "passwordHash"=$3, 
+                "email"=$4, 
+                "createdAt"=$5, 
+                "emailConfirmationCode"=$6, 
+                "emailExpirationTime"=$7, 
+                "emailIsConfirmed"=$8, 
+                "isBanned"=$9, 
+                "banDate"=$10, 
+                "banReason"=$11
+              WHERE "id" = $1;`,
+      [
+        user.id,
+        user.login,
+        user.passwordHash,
+        user.email,
+        user.createdAt,
+        user.emailConfirmationCode,
+        user.emailExpirationTime,
+        user.emailIsConfirmed,
+        user.isBanned,
+        user.banDate,
+        user.banReason,
+      ],
+    );
+    return !!result;
   }
 
   //mongo
@@ -72,12 +105,12 @@ export class UsersRepository {
   async findById(id: string): Promise<UserDocument | null> {
     return this.userModel.findOne({ id: id });
   }
-  /*async findByField(
+  async findByField(
     field: string,
     value: string,
   ): Promise<UserDocument | null> {
     return this.userModel.findOne({ [field]: value });
-  }*/
+  }
   async save(user: UserDocument): Promise<boolean> {
     return !!(await user.save());
   }

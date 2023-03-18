@@ -1,6 +1,6 @@
-import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
-import { ConfirmRegistrationCommand } from "./commands/confirm-registration.command";
-import { UsersRepository } from "../../../ifrastructure/repositories/users.repository";
+import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
+import { ConfirmRegistrationCommand } from './commands/confirm-registration.command';
+import { UsersRepository } from '../../../ifrastructure/repositories/users.repository';
 
 @CommandHandler(ConfirmRegistrationCommand)
 export class ConfirmRegistrationUseCase
@@ -10,13 +10,15 @@ export class ConfirmRegistrationUseCase
 
   async execute(command: ConfirmRegistrationCommand): Promise<boolean> {
     const { code } = command;
-    const user = await this.usersRepository.findByField(
+    const user = await this.usersRepository.findByField1(
       'emailConfirmationCode',
       code,
     );
     if (!user) return false;
     const result = await user.confirmEmail();
     if (!result) return false;
-    return await this.usersRepository.save(user);
+    const result1 = await this.usersRepository.update(user);
+    console.log(result1);
+    return result1;
   }
 }

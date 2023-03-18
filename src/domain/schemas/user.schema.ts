@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { add } from 'date-fns';
 import { UserCreateDtoType } from '../../modules/public/application/types/user.create.dto.type';
 import { Injectable } from '@nestjs/common';
+import { FoundUserDtoType } from '../../modules/auth/types/found-user-dto.type';
 
 export type UserDocument = HydratedDocument<User>;
 
@@ -40,7 +41,7 @@ export class User {
   }
 
   @Prop({ required: true })
-  id: string;
+  id: number;
 
   @Prop({ required: true })
   login: string;
@@ -100,6 +101,19 @@ export class User {
     this.isBanned = false;
     this.banDate = null;
     this.banReason = null;
+  }
+  async setAll(userDto: FoundUserDtoType) {
+    this.id = userDto.id;
+    this.login = userDto.login;
+    this.passwordHash = userDto.passwordHash;
+    this.email = userDto.email;
+    this.createdAt = userDto.createdAt;
+    this.emailConfirmationCode = userDto.emailConfirmationCode;
+    this.emailExpirationTime = userDto.emailExpirationTime;
+    this.emailIsConfirmed = userDto.emailIsConfirmed;
+    this.isBanned = userDto.isBanned;
+    this.banDate = userDto.banDate;
+    this.banReason = userDto.banDate;
   }
   static async makeInstance(
     userDto: UserCreateDtoType,
