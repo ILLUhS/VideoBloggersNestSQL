@@ -1,8 +1,8 @@
-import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
-import { CreateNewPairTokensCommand } from "./commands/create-new-pair-tokens.command";
-import { AuthService } from "../../services/auth.service";
-import { RefreshTokenMetasRepository } from "../../../ifrastructure/repositories/refresh.token.metas.repository";
-import { TokensType } from "../../types/tokens.type";
+import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
+import { CreateNewPairTokensCommand } from './commands/create-new-pair-tokens.command';
+import { AuthService } from '../../services/auth.service';
+import { RefreshTokenMetasRepository } from '../../../ifrastructure/repositories/refresh.token.metas.repository';
+import { TokensType } from '../../types/tokens.type';
 
 @CommandHandler(CreateNewPairTokensCommand)
 export class CreateNewPairTokensUseCase
@@ -22,16 +22,17 @@ export class CreateNewPairTokensUseCase
       deviceId,
     );
     const getPayload = await this.authService.getPayload(refreshToken);
-    const token = await this.refreshTokenMetaRepository.findByUserIdAndDeviceId(
-      userId,
-      deviceId,
-    );
-    token.updateProperties({
+    const session =
+      await this.refreshTokenMetaRepository.findByUserIdAndDeviceId(
+        userId,
+        deviceId,
+      );
+    session.updateProperties({
       issuedAt: getPayload.iat,
       expirationAt: getPayload.exp,
       deviceIp: ip,
     });
-    await this.refreshTokenMetaRepository.save(token);
+    await this.refreshTokenMetaRepository.update(session);
     return { accessToken, refreshToken };
   }
 }

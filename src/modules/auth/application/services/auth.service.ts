@@ -3,7 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 import { v4 as uuidv4 } from 'uuid';
 import * as bcrypt from 'bcrypt';
 import { RefreshTokenMetasRepository } from '../../ifrastructure/repositories/refresh.token.metas.repository';
-import { User, UserDocument } from '../../../../domain/schemas/user.schema';
+import { User } from '../../../../domain/schemas/user.schema';
 import { MailerService } from '@nestjs-modules/mailer';
 import { PasswordRecoveriesRepository } from '../../ifrastructure/repositories/password-recoveries.repository';
 import { PasswordRecovery } from '../../../../domain/schemas/password-recovery.schema';
@@ -23,13 +23,10 @@ export class AuthService {
     const passwordSalt = await bcrypt.genSalt(10);
     return await this.generateHash(password, passwordSalt);
   }
-  async findUserByField(
-    field: string,
-    value: string,
-  ): Promise<UserDocument | null> {
-    return await this.usersRepository.findByField(field, value);
+  async findUserByField(field: string, value: any): Promise<User | null> {
+    return await this.usersRepository.findByField1(field, value);
   }
-  async createAccessToken(userId: string, login: string) {
+  async createAccessToken(userId: number, login: string) {
     const payload = {
       userId: userId,
       login: login,
@@ -39,7 +36,7 @@ export class AuthService {
       expiresIn: '15m',
     });
   }
-  async createRefreshToken(userId: string, login: string, deviceId = uuidv4()) {
+  async createRefreshToken(userId: number, login: string, deviceId = uuidv4()) {
     return this.jwtService.sign(
       {
         deviceId: deviceId,
@@ -64,14 +61,14 @@ export class AuthService {
       payload.userId,
     );
   }
-  async findSession(deviceId: string): Promise<string | null> {
+  async findSession(deviceId: string): Promise<number | null> {
     const session = await this.refreshTokenMetasRepository.findByDeviceId(
       deviceId,
     );
     return session ? session.userId : null;
   }
   async cechCredentials(loginOrEmail: string, password: string) {
-    const user = await this.usersRepository.findByField(
+    const user = await this.usersRepository.findByField1(
       await this.isLoginOrEmail(loginOrEmail),
       loginOrEmail,
     );

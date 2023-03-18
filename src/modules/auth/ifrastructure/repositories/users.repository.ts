@@ -56,6 +56,7 @@ export class UsersRepository {
                 WHERE "${field}" = $1;`,
       [value],
     );
+    if (!foundUser.length) return null;
     const user = new User({
       login: foundUser[0].login,
       passwordHash: foundUser[0].passwordHash,

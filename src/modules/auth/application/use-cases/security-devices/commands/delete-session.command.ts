@@ -1,6 +1,6 @@
 export class DeleteSessionCommand {
   constructor(
-    public readonly userId: string,
+    public readonly userId: number,
     public readonly deviceId: string,
   ) {}
 }

@@ -7,7 +7,7 @@ export class SecurityDevicesService {
     private refreshTokenMetasRepository: RefreshTokenMetasRepository,
   ) {}
 
-  async deleteSession(userId: string, deviceId: string) {
+  async deleteSession(userId: number, deviceId: string) {
     return await this.refreshTokenMetasRepository.deleteByUserIdAndDeviceId(
       userId,
       deviceId,
