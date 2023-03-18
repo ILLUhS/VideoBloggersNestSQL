@@ -1,8 +1,8 @@
-import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
-import { BanUserForBlogCommand } from "./commands/ban-user-for-blog.command";
-import { BBlogsRepository } from "../../../infrastructure/repositories/b-blogs.repository";
-import { BUsersRepository } from "../../../infrastructure/repositories/b-users.repository";
-import { ForbiddenException, NotFoundException } from "@nestjs/common";
+import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
+import { BanUserForBlogCommand } from './commands/ban-user-for-blog.command';
+import { BBlogsRepository } from '../../../infrastructure/repositories/b-blogs.repository';
+import { BUsersRepository } from '../../../infrastructure/repositories/b-users.repository';
+import { ForbiddenException, NotFoundException } from '@nestjs/common';
 
 @CommandHandler(BanUserForBlogCommand)
 export class BanUserFoBlogUseCase
@@ -20,7 +20,7 @@ export class BanUserFoBlogUseCase
     const found = blogsByUser.find((b) => b.id === banDto.blogId);
     if (!found) throw new ForbiddenException();
     const blog = await this.blogsRepository.findById(banDto.blogId);
-    const bannedUser = await this.usersRepository.findById(userId);
+    const bannedUser = await this.usersRepository.findByField('id', userId);
     if (!bannedUser) throw new NotFoundException();
     if (banDto.isBanned)
       blog.banUser({

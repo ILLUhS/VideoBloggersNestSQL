@@ -22,7 +22,7 @@ export class NewPassUseCase implements ICommandHandler<NewPassCommand> {
     const result = await passRec.recoveryConfirm();
     if (!result) return false;
     await this.passRecRepository.update(passRec);
-    const user = await this.usersRepository.findByField1('id', passRec.userId);
+    const user = await this.usersRepository.findByField('id', passRec.userId);
     if (!user) return false;
     const newPassHash = await this.authService.getPassHash(newPassword);
     await user.setPassHash(newPassHash);

@@ -24,7 +24,7 @@ export class AuthService {
     return await this.generateHash(password, passwordSalt);
   }
   async findUserByField(field: string, value: any): Promise<User | null> {
-    return await this.usersRepository.findByField1(field, value);
+    return await this.usersRepository.findByField(field, value);
   }
   async createAccessToken(userId: number, login: string) {
     const payload = {
@@ -68,7 +68,7 @@ export class AuthService {
     return session ? session.userId : null;
   }
   async cechCredentials(loginOrEmail: string, password: string) {
-    const user = await this.usersRepository.findByField1(
+    const user = await this.usersRepository.findByField(
       await this.isLoginOrEmail(loginOrEmail),
       loginOrEmail,
     );

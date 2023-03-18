@@ -10,7 +10,7 @@ import { SaUsersService } from '../../application/services/sa-users.service';
 export class UserIdValidator implements ValidatorConstraintInterface {
   constructor(private usersService: SaUsersService) {}
 
-  async validate(userId: string): Promise<boolean> {
+  async validate(userId: number): Promise<boolean> {
     const user = await this.usersService.findUserById(userId);
     return !!user;
   }

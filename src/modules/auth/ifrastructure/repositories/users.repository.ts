@@ -38,7 +38,7 @@ export class UsersRepository {
       ],
     );
   }
-  async findByField1(field: string, value: any): Promise<User | null> {
+  async findByField(field: string, value: any): Promise<User | null> {
     const foundUser = await this.dataSource.query(
       `SELECT
                 "id",
@@ -96,6 +96,16 @@ export class UsersRepository {
     );
     return !!result;
   }
+  async deleteById(id: number): Promise<boolean> {
+    const result = await this.dataSource.query(
+      `DELETE FROM public."Users"
+              WHERE "id" = $1
+              RETURNING "id";`,
+      [id],
+    );
+    if (!result.length) return false;
+    return true;
+  }
 
   //mongo
   /*constructor(@InjectModel(User.name) protected userModel: UserModelType) {}*/
@@ -106,12 +116,12 @@ export class UsersRepository {
   async findById(id: any): Promise<UserDocument | null> {
     return this.userModel.findOne({ id: id });
   }
-  async findByField(
+  /* async findByField(
     field: string,
     value: string,
   ): Promise<UserDocument | null> {
     return this.userModel.findOne({ [field]: value });
-  }
+  }*/
   async save(user: UserDocument): Promise<boolean> {
     return !!(await user.save());
   }

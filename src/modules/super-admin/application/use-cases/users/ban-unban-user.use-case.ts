@@ -1,15 +1,15 @@
-import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
-import { BanUnbanUserCommand } from "./commands/ban-unban-user.command";
-import { InjectModel } from "@nestjs/mongoose";
-import { User, UserModelType } from "../../../../../domain/schemas/user.schema";
-import { SaUsersRepository } from "../../../infrastructure/repositories/sa-users.repository";
-import { SaUsersService } from "../../services/sa-users.service";
-import { BadRequestException } from "@nestjs/common";
-import { SaRefreshTokenMetaRepository } from "../../../infrastructure/repositories/sa-refresh-token-meta.repository";
-import { SkipThrottle } from "@nestjs/throttler";
-import { SaPostsRepository } from "../../../infrastructure/repositories/sa-posts.repository";
-import { SaCommentsRepository } from "../../../infrastructure/repositories/sa-comments.repository";
-import { SaReactionsRepository } from "../../../infrastructure/repositories/sa-reactions.repository";
+import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
+import { BanUnbanUserCommand } from './commands/ban-unban-user.command';
+import { InjectModel } from '@nestjs/mongoose';
+import { User, UserModelType } from '../../../../../domain/schemas/user.schema';
+import { SaUsersService } from '../../services/sa-users.service';
+import { BadRequestException } from '@nestjs/common';
+import { SaRefreshTokenMetaRepository } from '../../../infrastructure/repositories/sa-refresh-token-meta.repository';
+import { SkipThrottle } from '@nestjs/throttler';
+import { SaPostsRepository } from '../../../infrastructure/repositories/sa-posts.repository';
+import { SaCommentsRepository } from '../../../infrastructure/repositories/sa-comments.repository';
+import { SaReactionsRepository } from '../../../infrastructure/repositories/sa-reactions.repository';
+import { UsersRepository } from '../../../../auth/ifrastructure/repositories/users.repository';
 
 @SkipThrottle()
 @CommandHandler(BanUnbanUserCommand)
@@ -19,7 +19,7 @@ export class BanUnbanUserUseCase
   constructor(
     @InjectModel(User.name) private userModel: UserModelType,
     private usersService: SaUsersService,
-    private usersRepository: SaUsersRepository,
+    private usersRepository: UsersRepository,
     private postsRepository: SaPostsRepository,
     private commentsRepository: SaCommentsRepository,
     private reactionsRepository: SaReactionsRepository,
@@ -27,7 +27,7 @@ export class BanUnbanUserUseCase
   ) {}
   async execute(command: BanUnbanUserCommand) {
     const { id, isBanned, banReason } = command.banUserDto;
-    const user = await this.usersService.findUserById(id);
+    const user = await this.usersService.findUserById(+id); //todo id number delete '+'
     if (!user)
       throw new BadRequestException({
         message: [{ field: 'id', message: 'invalid id' }],
@@ -41,7 +41,7 @@ export class BanUnbanUserUseCase
       await user.ban(banReason);
       await this.refreshTokenMetaRepository.deleteByUserId(id);
     } else await user.unban();
-    await this.usersRepository.save(user);
+    await this.usersRepository.update(user);
     //выставляем всем сущностям бан статус
     if (postsByUser) {
       postsByUser.forEach((p) => {

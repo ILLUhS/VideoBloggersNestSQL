@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { SaUsersRepository } from './infrastructure/repositories/sa-users.repository';
 import { SaBlogsController } from './api/controllers/sa-blogs.controller';
 import { CqrsModule } from '@nestjs/cqrs';
 import { SaUsersService } from './application/services/sa-users.service';
@@ -22,6 +21,7 @@ import { SaReactionsRepository } from './infrastructure/repositories/sa-reaction
 import { PublicModule } from '../public/public.module';
 import { DeleteUserUseCase } from './application/use-cases/users/delete-user.use-case';
 import { BanUnbanBlogUseCase } from './application/use-cases/blogs/ban-unban-blog.use-case';
+import { UsersRepository } from '../auth/ifrastructure/repositories/users.repository';
 
 const useCases = [
   BindBlogWithUserUseCase,
@@ -32,7 +32,7 @@ const useCases = [
 ];
 const services = [SaUsersService, SaBlogsService];
 const repositories = [
-  SaUsersRepository,
+  UsersRepository,
   SaBlogsRepository,
   SaPostsRepository,
   SaCommentsRepository,
