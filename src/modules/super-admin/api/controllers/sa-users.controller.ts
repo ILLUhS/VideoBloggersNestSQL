@@ -5,7 +5,6 @@ import {
   Delete,
   Get,
   HttpCode,
-  InternalServerErrorException,
   NotFoundException,
   Param,
   Post,
@@ -43,10 +42,9 @@ export class SaUsersController {
   async createUser(@Body() userDto: UserInputDto) {
     const userId = await this.commandBus.execute<
       CreateUserCommand,
-      Promise<string>
+      Promise<number>
     >(new CreateUserCommand(userDto));
-    if (!userId) throw new InternalServerErrorException();
-    return await this.saUsersQueryRepository.findUserById(userId);
+    return; //await this.saUsersQueryRepository.findUserById(userId);
   }
 
   @UseGuards(BasicAuthGuard)

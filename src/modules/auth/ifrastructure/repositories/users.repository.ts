@@ -14,8 +14,8 @@ export class UsersRepository {
     @InjectDataSource() protected dataSource: DataSource,
     @InjectModel(User.name) protected userModel: UserModelType,
   ) {}
-  async create(user: User) {
-    return this.dataSource.query(
+  async create(user: User): Promise<number> {
+    const result = this.dataSource.query(
       `INSERT INTO public."Users"(
                 "login", 
                 "passwordHash", 
@@ -37,6 +37,7 @@ export class UsersRepository {
         user.isBanned,
       ],
     );
+    return result[0].id;
   }
   async findByField(field: string, value: any): Promise<User | null> {
     const foundUser = await this.dataSource.query(
