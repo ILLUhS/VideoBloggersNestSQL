@@ -44,7 +44,7 @@ export class SaUsersController {
       CreateUserCommand,
       Promise<number>
     >(new CreateUserCommand(userDto));
-    return; //await this.saUsersQueryRepository.findUserById(userId);
+    return await this.saUsersQueryRepository.findUserById(userId);
   }
 
   @UseGuards(BasicAuthGuard)

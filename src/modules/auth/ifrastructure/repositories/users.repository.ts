@@ -15,7 +15,7 @@ export class UsersRepository {
     @InjectModel(User.name) protected userModel: UserModelType,
   ) {}
   async create(user: User): Promise<number> {
-    const result = this.dataSource.query(
+    const result = await this.dataSource.query(
       `INSERT INTO public."Users"(
                 "login", 
                 "passwordHash", 
@@ -123,7 +123,7 @@ export class UsersRepository {
   ): Promise<UserDocument | null> {
     return this.userModel.findOne({ [field]: value });
   }*/
-  async save(user: UserDocument): Promise<boolean> {
+  /*async save(user: UserDocument): Promise<boolean> {
     return !!(await user.save());
-  }
+  }*/
 }
