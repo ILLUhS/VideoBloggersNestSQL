@@ -1,5 +1,5 @@
 export type BanUserDtoType = {
-  id: string; //TODO id: number
+  id: number;
   isBanned: boolean;
   banReason: string;
 };

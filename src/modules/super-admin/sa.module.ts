@@ -13,7 +13,6 @@ import { BanUnbanUserUseCase } from './application/use-cases/users/ban-unban-use
 import { SaBlogsRepository } from './infrastructure/repositories/sa-blogs.repository';
 import { BlogIdValidator } from './api/validators/blog.id.validator';
 import { SaBlogsService } from './application/services/sa-blogs.service';
-import { SaRefreshTokenMetaRepository } from './infrastructure/repositories/sa-refresh-token-meta.repository';
 import { AuthModule } from '../auth/auth.module';
 import { SaPostsRepository } from './infrastructure/repositories/sa-posts.repository';
 import { SaCommentsRepository } from './infrastructure/repositories/sa-comments.repository';
@@ -22,6 +21,7 @@ import { PublicModule } from '../public/public.module';
 import { DeleteUserUseCase } from './application/use-cases/users/delete-user.use-case';
 import { BanUnbanBlogUseCase } from './application/use-cases/blogs/ban-unban-blog.use-case';
 import { UsersRepository } from '../auth/ifrastructure/repositories/users.repository';
+import { RefreshTokenMetasRepository } from '../auth/ifrastructure/repositories/refresh.token.metas.repository';
 
 const useCases = [
   BindBlogWithUserUseCase,
@@ -37,7 +37,7 @@ const repositories = [
   SaPostsRepository,
   SaCommentsRepository,
   SaReactionsRepository,
-  SaRefreshTokenMetaRepository,
+  RefreshTokenMetasRepository,
 ];
 const queryRepositories = [SaBlogsQueryRepository, SaUsersQueryRepository];
 const validators = [UserIdValidator, BlogIdValidator];

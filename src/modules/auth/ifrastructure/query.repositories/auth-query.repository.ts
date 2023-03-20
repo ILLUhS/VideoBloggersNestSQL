@@ -1,28 +1,26 @@
-import { Injectable } from "@nestjs/common";
-import { InjectModel } from "@nestjs/mongoose";
-import { User, UserModelType } from "../../../../domain/schemas/user.schema";
+import { Injectable } from '@nestjs/common';
+import { InjectDataSource } from '@nestjs/typeorm';
+import { DataSource } from 'typeorm';
 
 @Injectable()
 export class AuthQueryRepository {
-  constructor(@InjectModel(User.name) private userModel: UserModelType) {}
+  constructor(@InjectDataSource() protected dataSource: DataSource) {}
 
-  async findAuthUserById(id: string) {
-    const user = await this.userModel
-      .findOne({ id: id })
-      .select({
-        _id: 0,
-        id: 1,
-        login: 1,
-        email: 1,
-        createdAt: 1,
-      })
-      .exec();
-    return user
-      ? {
-          email: user.email,
-          login: user.login,
-          userId: user.id,
-        }
-      : null;
+  async findAuthUserById(id: number) {
+    const user = await this.dataSource.query(
+      `SELECT
+                "id",
+                "login",
+                "email",
+                FROM public."Users"
+                WHERE "id" = $1;`,
+      [id],
+    );
+    if (!user.length) return null;
+    return {
+      email: user[0].email,
+      login: user[0].login,
+      userId: user[0].id,
+    };
   }
 }

@@ -107,23 +107,7 @@ export class UsersRepository {
     if (!result.length) return false;
     return true;
   }
-
-  //mongo
-  /*constructor(@InjectModel(User.name) protected userModel: UserModelType) {}*/
-
-  /*async create(userDto: UserCreateDtoType): Promise<UserDocument> {
-    return await this.userModel.makeInstance(userDto, this.userModel);
-  }*/
   async findById(id: any): Promise<UserDocument | null> {
     return this.userModel.findOne({ id: id });
   }
-  /* async findByField(
-    field: string,
-    value: string,
-  ): Promise<UserDocument | null> {
-    return this.userModel.findOne({ [field]: value });
-  }*/
-  /*async save(user: UserDocument): Promise<boolean> {
-    return !!(await user.save());
-  }*/
 }

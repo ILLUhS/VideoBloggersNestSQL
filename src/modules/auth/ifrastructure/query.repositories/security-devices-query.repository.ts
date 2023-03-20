@@ -1,22 +1,23 @@
 import { Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import {
-  RefreshTokenMeta,
-  RefreshTokenMetaModelType,
-} from '../../../../domain/schemas/refresh-token-meta.schema';
+import { InjectDataSource } from '@nestjs/typeorm';
+import { DataSource } from 'typeorm';
 
 @Injectable()
 export class SecurityDevicesQueryRepository {
-  constructor(
-    @InjectModel(RefreshTokenMeta.name)
-    private refreshTokenMetaModel: RefreshTokenMetaModelType,
-  ) {}
+  constructor(@InjectDataSource() protected dataSource: DataSource) {}
 
-  async findSessionsByUserId(userId: string) {
-    const sessions = await this.refreshTokenMetaModel
-      .find({ userId: userId })
-      .exec();
-    if (!sessions) return null;
+  async findSessionsByUserId(userId: number) {
+    const sessions = await this.dataSource.query(
+      `SELECT
+                "issuedAt",
+                "deviceId", 
+                "deviceIp", 
+                "deviceName"
+                FROM public."RefreshTokenMetas"
+                WHERE "userId" = $1;`,
+      [userId],
+    );
+    if (!sessions.length) return null;
     return sessions.map((s) => ({
       ip: s.deviceIp,
       title: s.deviceName,

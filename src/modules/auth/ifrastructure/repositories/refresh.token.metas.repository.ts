@@ -160,4 +160,14 @@ export class RefreshTokenMetasRepository {
     if (!result.length) return false;
     return true;
   }
+  async deleteByUserId(userId: number): Promise<boolean> {
+    const result = await this.dataSource.query(
+      `DELETE FROM public."RefreshTokenMetas"
+              WHERE "userId" = $1
+              RETURNING "id";`,
+      [userId],
+    );
+    if (!result.length) return false;
+    return true;
+  }
 }

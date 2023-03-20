@@ -51,7 +51,7 @@ export class SaUsersController {
   @HttpCode(204)
   @Put(':id/ban')
   async banUnbanUser(
-    @Param('id') id: string,
+    @Param('id') id: number,
     @Body() banUserInputDto: BanUserInputDto,
   ) {
     return await this.commandBus.execute(
