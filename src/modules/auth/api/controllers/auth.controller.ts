@@ -9,32 +9,32 @@ import {
   Req,
   Res,
   UseGuards,
-  UseInterceptors
-} from "@nestjs/common";
-import { Response } from "express";
-import { UserInputDto } from "../../../public/application/types/user.input.dto";
-import { EmailDto } from "../../types/email.dto";
-import { SkipThrottle } from "@nestjs/throttler";
-import { NewPassDto } from "../../types/new.pass.dto";
-import { CheckLoginEmailInterceptor } from "./interceptors/check.login.email.interceptor";
-import { AuthQueryRepository } from "../../ifrastructure/query.repositories/auth-query.repository";
-import { CheckBanUserInterceptor } from "./interceptors/check-ban-user.interceptor";
-import { LocalAuthGuard } from "./guards/local-auth.guard";
-import RequestWithUser from "../../../../api/interfaces/request-with-user.interface";
-import { CommandBus } from "@nestjs/cqrs";
-import { LoginCommand } from "../../application/use-cases/auth/commands/login.command";
-import { TokensType } from "../../application/types/tokens.type";
-import { BearerAuthGuard } from "./guards/bearer-auth.guard";
-import { RefreshAuthGuard } from "./guards/refresh-auth.guard";
-import { CreateNewPairTokensCommand } from "../../application/use-cases/auth/commands/create-new-pair-tokens.command";
-import { RegistrationCommand } from "../../application/use-cases/auth/commands/registration.command";
-import { ConfirmRegistrationCommand } from "../../application/use-cases/auth/commands/confirm-registration.command";
-import { ResendEmailCommand } from "../../application/use-cases/auth/commands/resend-email.command";
-import { DeleteSessionCommand } from "../../application/use-cases/security-devices/commands/delete-session.command";
-import { PassRecoveryCommand } from "../../application/use-cases/auth/commands/pass-recovery.command";
-import { NewPassCommand } from "../../application/use-cases/auth/commands/new-pass.command";
+  UseInterceptors,
+} from '@nestjs/common';
+import { Response } from 'express';
+import { UserInputDto } from '../../../public/application/types/user.input.dto';
+import { EmailDto } from '../../types/email.dto';
+import { SkipThrottle } from '@nestjs/throttler';
+import { NewPassDto } from '../../types/new.pass.dto';
+import { CheckLoginEmailInterceptor } from './interceptors/check.login.email.interceptor';
+import { AuthQueryRepository } from '../../ifrastructure/query.repositories/auth-query.repository';
+import { CheckBanUserInterceptor } from './interceptors/check-ban-user.interceptor';
+import { LocalAuthGuard } from './guards/local-auth.guard';
+import RequestWithUser from '../../../../api/interfaces/request-with-user.interface';
+import { CommandBus } from '@nestjs/cqrs';
+import { LoginCommand } from '../../application/use-cases/auth/commands/login.command';
+import { TokensType } from '../../application/types/tokens.type';
+import { BearerAuthGuard } from './guards/bearer-auth.guard';
+import { RefreshAuthGuard } from './guards/refresh-auth.guard';
+import { CreateNewPairTokensCommand } from '../../application/use-cases/auth/commands/create-new-pair-tokens.command';
+import { RegistrationCommand } from '../../application/use-cases/auth/commands/registration.command';
+import { ConfirmRegistrationCommand } from '../../application/use-cases/auth/commands/confirm-registration.command';
+import { ResendEmailCommand } from '../../application/use-cases/auth/commands/resend-email.command';
+import { DeleteSessionCommand } from '../../application/use-cases/security-devices/commands/delete-session.command';
+import { PassRecoveryCommand } from '../../application/use-cases/auth/commands/pass-recovery.command';
+import { NewPassCommand } from '../../application/use-cases/auth/commands/new-pass.command';
 
-@SkipThrottle()
+//@SkipThrottle()
 @Controller('auth')
 export class AuthController {
   constructor(

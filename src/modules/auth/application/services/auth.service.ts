@@ -33,7 +33,7 @@ export class AuthService {
     };
     return this.jwtService.sign(payload, {
       secret: process.env.JWT_SECRET,
-      expiresIn: '15m',
+      expiresIn: '10s',
     });
   }
   async createRefreshToken(userId: number, login: string, deviceId = uuidv4()) {
@@ -45,7 +45,7 @@ export class AuthService {
       },
       {
         secret: process.env.REFRESH_JWT_SECRET,
-        expiresIn: '1h',
+        expiresIn: '20s',
       },
     );
   }
