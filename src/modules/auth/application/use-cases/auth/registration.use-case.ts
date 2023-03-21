@@ -21,7 +21,7 @@ export class RegistrationUseCase
       email,
       passwordHash,
     });
-    //await this.authService.sendConfirmEmail(user);
+    await this.authService.sendConfirmEmail(user);
     this.usersRepository.create(user);
     return;
   }

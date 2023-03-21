@@ -34,15 +34,11 @@ export class SaUsersQueryRepository {
                 "banDate",
                 "banReason"
                 FROM public."Users"
-                JOIN (SELECT id 
-                FROM public."Users" 
-                ORDER BY "id"
-                LIMIT %3$L OFFSET %4$L) as b 
-                ON b.id = "Users"."id"
                 WHERE ("login" ~* %1$L
                 OR "email" ~* %2$L)
-                AND "isBanned" IS %5$s
-                ORDER BY %6$I %7$s;`,
+                AND "isBanned" IS %5$s 
+                ORDER BY %6$I %7$s
+                LIMIT %3$L OFFSET %4$L;`,
       searchParams.searchLoginTerm,
       searchParams.searchEmailTerm,
       searchParams.pageSize,
