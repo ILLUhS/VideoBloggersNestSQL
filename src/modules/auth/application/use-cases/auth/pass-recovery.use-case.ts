@@ -25,8 +25,12 @@ export class PassRecoveryUseCase
         userId: user.id,
         email: email,
       });
+      await this.passRecRepository.create(passRec);
+    } else {
+      await passRec.updRecovery(user.email);
+      await this.passRecRepository.update(passRec);
     }
     await this.authService.sendRecoveryEmail(passRec);
-    return !!(await this.passRecRepository.create(passRec));
+    return true;
   }
 }

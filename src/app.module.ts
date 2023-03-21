@@ -11,6 +11,7 @@ import { BloggerModule } from './modules/blogger/blogger.module';
 import { PublicModule } from './modules/public/public.module';
 import { AppService } from './application/services/app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import * as process from 'process';
 
 @Module({
   imports: [
@@ -23,14 +24,15 @@ import { TypeOrmModule } from '@nestjs/typeorm';
     ThrottlerModule.forRootAsync({ useFactory: () => ({ ttl: 10, limit: 5 }) }),
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: 'localhost',
-      port: 5432,
-      username: 'postgres',
-      password: 'admin',
-      database: 'video-bloggers',
+      host: process.env.PGHOST, //'localhost',
+      //port: 5432,
+      username: process.env.PGUSER, //'postgres',
+      password: process.env.PGPASSWORD, //'admin',
+      database: process.env.PGDATABASE, //'video-bloggers',
       entities: [],
       autoLoadEntities: false,
       synchronize: false,
+      ssl: true,
     }),
   ],
   controllers: [AppController, TestingAllDataController],

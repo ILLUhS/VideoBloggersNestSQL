@@ -1,11 +1,11 @@
-import { HydratedDocument, Model } from "mongoose";
-import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import { v4 as uuidv4 } from "uuid";
-import { BlogCreateDto } from "../../modules/public/application/types/blog.create.dto";
-import { BlogUpdateDto } from "../../modules/public/application/types/blog.update.dto";
-import { UserInfoType } from "../../modules/blogger/types/user-info.type";
-import { BannedUsersType } from "../types/banned-users.type";
-import { BannedUserDtoType } from "../types/banned-user-dto.type";
+import { HydratedDocument, Model } from 'mongoose';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { v4 as uuidv4 } from 'uuid';
+import { BlogCreateDto } from '../../modules/public/application/types/blog.create.dto';
+import { BlogUpdateDto } from '../../modules/public/application/types/blog.update.dto';
+import { UserInfoType } from '../../modules/blogger/types/user-info.type';
+import { BannedUsersType } from '../types/banned-users.type';
+import { BannedUserDtoType } from '../types/banned-user-dto.type';
 
 export type BlogDocument = HydratedDocument<Blog>;
 

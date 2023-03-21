@@ -31,7 +31,7 @@ export class BanUnbanUserUseCase
     if (!user)
       throw new BadRequestException({
         message: [{ field: 'id', message: 'invalid id' }],
-      });
+      }); //todo раскомментить всё когда все сущности перейдут на sql
     //ищем все посты, комменты и лайки пользоателя
     /*const postsByUser = await this.postsRepository.findByUserId(id);
     const commentByUsers = await this.commentsRepository.findByUserId(id);
