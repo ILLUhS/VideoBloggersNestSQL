@@ -11,7 +11,7 @@ export class AuthQueryRepository {
       `SELECT
                 "id",
                 "login",
-                "email",
+                "email"
                 FROM public."Users"
                 WHERE "id" = $1;`,
       [id],
@@ -20,7 +20,7 @@ export class AuthQueryRepository {
     return {
       email: user[0].email,
       login: user[0].login,
-      userId: user[0].id,
+      userId: String(user[0].id),
     };
   }
 }

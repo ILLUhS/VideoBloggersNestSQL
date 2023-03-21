@@ -118,7 +118,7 @@ export class RefreshTokenMetasRepository {
                 "deviceId"=$4, 
                 "deviceIp"=$5, 
                 "deviceName"=$6, 
-                "userId"=$7,
+                "userId"=$7
               WHERE "id" = $1;`,
       [
         session.id,
