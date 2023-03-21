@@ -1,5 +1,5 @@
 export type UserViewType = {
-  id: number;
+  id: string;
   login: string;
   email: string;
   createdAt: string;

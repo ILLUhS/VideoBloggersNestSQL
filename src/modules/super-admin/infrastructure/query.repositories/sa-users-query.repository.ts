@@ -70,7 +70,7 @@ export class SaUsersQueryRepository {
       pageSize: searchParams.pageSize,
       totalCount: +usersCount,
       items: users.map((user) => ({
-        id: user.id,
+        id: String(user.id),
         login: user.login,
         email: user.email,
         createdAt: user.createdAt,
@@ -98,7 +98,7 @@ export class SaUsersQueryRepository {
     );
     if (!user.length) return null;
     return {
-      id: user[0].id,
+      id: String(user[0].id),
       login: user[0].login,
       email: user[0].email,
       createdAt: user[0].createdAt,

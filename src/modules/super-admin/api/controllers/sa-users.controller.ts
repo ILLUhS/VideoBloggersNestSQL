@@ -22,6 +22,7 @@ import { CreateUserCommand } from '../../application/use-cases/users/commands/cr
 import { DeleteUserCommand } from '../../application/use-cases/users/commands/delete-user.command';
 import { BanUnbanUserCommand } from '../../application/use-cases/users/commands/ban-unban-user.command';
 import { BanUserInputDto } from '../dto/ban-user-input.dto';
+import { IntTransformPipe } from '../../../public/api/pipes/int-transform.pipe';
 
 @SkipThrottle()
 @Controller('sa/users')
@@ -66,7 +67,7 @@ export class SaUsersController {
   @UseGuards(BasicAuthGuard)
   @HttpCode(204)
   @Delete(':id')
-  async deleteUserById(@Param('id') id: number) {
+  async deleteUserById(@Param('id', new IntTransformPipe()) id: number) {
     const result = await this.commandBus.execute<
       DeleteUserCommand,
       Promise<boolean>
