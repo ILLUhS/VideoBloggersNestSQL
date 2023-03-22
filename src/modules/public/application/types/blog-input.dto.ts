@@ -1,7 +1,7 @@
-import { IsString, IsUrl, Length } from "class-validator";
-import { Transform, TransformFnParams } from "class-transformer";
+import { IsString, IsUrl, Length } from 'class-validator';
+import { Transform, TransformFnParams } from 'class-transformer';
 
-export class BlogCreateDto {
+export class BlogInputDto {
   @IsString()
   @Transform(({ value }: TransformFnParams) => value?.trim())
   @Length(1, 15)

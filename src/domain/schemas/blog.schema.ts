@@ -1,11 +1,12 @@
 import { HydratedDocument, Model } from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { v4 as uuidv4 } from 'uuid';
-import { BlogCreateDto } from '../../modules/public/application/types/blog.create.dto';
+import { BlogInputDto } from '../../modules/public/application/types/blog-input.dto';
 import { BlogUpdateDto } from '../../modules/public/application/types/blog.update.dto';
 import { UserInfoType } from '../../modules/blogger/types/user-info.type';
 import { BannedUsersType } from '../types/banned-users.type';
 import { BannedUserDtoType } from '../types/banned-user-dto.type';
+import { BlogCreateDtoType } from '../../modules/blogger/types/blog-create-dto.type';
 
 export type BlogDocument = HydratedDocument<Blog>;
 
@@ -19,7 +20,7 @@ export type BlogModelMethods = {
 };
 export type BlogModelStaticMethods = {
   makeInstance(
-    blogDto: BlogCreateDto,
+    blogDto: BlogInputDto,
     userInfo: UserInfoType,
     BlogModel: BlogModelType,
   ): BlogDocument;
@@ -30,6 +31,15 @@ export type BlogModelType = Model<BlogDocument> &
 
 @Schema()
 export class Blog {
+  constructor(private blogDto: BlogCreateDtoType) {
+    this.name = blogDto.name;
+    this.description = blogDto.description;
+    this.websiteUrl = blogDto.websiteUrl;
+    this.createdAt = new Date().toISOString();
+    this.isMembership = false;
+    this.userId = blogDto.userId;
+    this.isBanned = false;
+  }
   @Prop({ required: true })
   id: string;
 
@@ -49,7 +59,7 @@ export class Blog {
   isMembership: boolean;
 
   @Prop({ required: true })
-  userId: string;
+  userId: number;
 
   @Prop({ required: true })
   userLogin: string;
@@ -64,7 +74,7 @@ export class Blog {
   bannedUsers: BannedUsersType[];
 
   static makeInstance(
-    blogDto: BlogCreateDto,
+    blogDto: BlogInputDto,
     userInfo: UserInfoType,
     BlogModel: BlogModelType,
   ): BlogDocument {
@@ -87,7 +97,7 @@ export class Blog {
     this.websiteUrl = blogDto.websiteUrl;
   }
 
-  setOwner(userId: string, userLogin: string) {
+  setOwner(userId: number, userLogin: string) {
     this.userId = userId;
     this.userLogin = userLogin;
   }

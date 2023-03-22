@@ -1,9 +1,8 @@
-import { BlogCreateDto } from "../../../../../public/application/types/blog.create.dto";
-import { UserInfoType } from "../../../../types/user-info.type";
+import { BlogInputDto } from '../../../../../public/application/types/blog-input.dto';
 
 export class CreateBlogCommand {
   constructor(
-    public readonly blogDto: BlogCreateDto,
-    public readonly userInfo: UserInfoType,
+    public readonly blogDto: BlogInputDto,
+    public readonly userId: number,
   ) {}
 }
