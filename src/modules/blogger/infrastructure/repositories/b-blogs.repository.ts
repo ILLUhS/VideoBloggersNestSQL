@@ -14,7 +14,6 @@ export class BBlogsRepository {
     @InjectDataSource() protected dataSource: DataSource,
     @InjectModel(Blog.name) private blogModel: BlogModelType,
   ) {}
-
   async create(blog: Blog): Promise<number> {
     const result = await this.dataSource.query(
       `INSERT INTO public."Blogs"(

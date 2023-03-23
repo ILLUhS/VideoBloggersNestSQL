@@ -1,9 +1,10 @@
-import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import { v4 as uuidv4 } from "uuid";
-import { HydratedDocument, Model } from "mongoose";
-import { PostCreateDto } from "../../modules/public/application/types/post.create.dto";
-import { PostUpdateDto } from "../../modules/public/application/types/post.update.dto";
-import { Reaction, ReactionDocument } from "./reaction.schema";
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { v4 as uuidv4 } from 'uuid';
+import { HydratedDocument, Model } from 'mongoose';
+import { PostCreateDto } from '../../modules/public/application/types/post.create.dto';
+import { PostUpdateDto } from '../../modules/public/application/types/post.update.dto';
+import { Reaction, ReactionDocument } from './reaction.schema';
+import { FoundPostDtoType } from '../../modules/public/types/found-post-dto.type';
 
 export type PostDocument = HydratedDocument<Post>;
 
@@ -29,8 +30,15 @@ export type PostModelType = Model<PostDocument> &
   toObject: { virtuals: true },
 })
 export class Post {
+  constructor(private postDto: PostCreateDto) {
+    this.title = postDto.title;
+    this.shortDescription = postDto.shortDescription;
+    this.content = postDto.content;
+    this.blogId = postDto.blogId;
+    this.createdAt = new Date().toISOString();
+  }
   @Prop({ required: true })
-  id: string;
+  id: number;
 
   @Prop({ required: true })
   title: string;
@@ -42,7 +50,7 @@ export class Post {
   content: string;
 
   @Prop({ required: true })
-  blogId: string;
+  blogId: number;
 
   @Prop({ required: true })
   blogName: string;
@@ -76,19 +84,24 @@ export class Post {
       isBanned: false,
     });
   }
-
   updateProperties(postDto: PostUpdateDto) {
     this.title = postDto.title;
     this.shortDescription = postDto.shortDescription;
     this.content = postDto.content;
   }
-
   updateBlogName(blogName: string) {
     this.blogName = blogName;
   }
-
   setBanStatus(isBanned: boolean) {
     this.isBanned = isBanned;
+  }
+  async setAll(postDto: FoundPostDtoType) {
+    this.id = postDto.id;
+    this.title = postDto.title;
+    this.shortDescription = postDto.shortDescription;
+    this.content = postDto.content;
+    this.blogId = postDto.blogId;
+    this.createdAt = postDto.createdAt;
   }
 }
 

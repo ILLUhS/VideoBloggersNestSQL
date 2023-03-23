@@ -1,6 +1,6 @@
-import { IsString, IsUUID, Length, Validate } from "class-validator";
-import { Transform, TransformFnParams } from "class-transformer";
-import { PostIdValidator } from "../../../blogger/api/controllers/validators/post-id.validator";
+import { IsString, Length, Validate } from 'class-validator';
+import { Transform, TransformFnParams } from 'class-transformer';
+import { PostIdValidator } from '../../../blogger/api/controllers/validators/post-id.validator';
 
 export class PostCreateDto {
   @IsString()
@@ -18,7 +18,7 @@ export class PostCreateDto {
   @Length(1, 1000)
   content: string;
 
-  @IsUUID(4)
+  @Transform(({ value }: TransformFnParams) => Number(value))
   @Validate(PostIdValidator)
-  blogId: string;
+  blogId: number;
 }
