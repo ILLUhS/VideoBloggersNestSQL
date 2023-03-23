@@ -1,10 +1,13 @@
-import { Injectable } from "@nestjs/common";
-import { InjectModel } from "@nestjs/mongoose";
-import { Comment, CommentModelType } from "../../../../domain/schemas/comment.schema";
-import { Blog, BlogModelType } from "../../../../domain/schemas/blog.schema";
-import { Post, PostModelType } from "../../../../domain/schemas/post.schema";
-import { QueryParamsDto } from "../../../super-admin/api/dto/query-params.dto";
-import { QueryMapHelpers } from "../../../public/infrastructure/query-map.helpers";
+import { Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import {
+  Comment,
+  CommentModelType,
+} from '../../../../domain/schemas/comment.schema';
+import { Blog, BlogModelType } from '../../../../domain/schemas/blog.schema';
+import { Post, PostModelType } from '../../../../domain/schemas/post.schema';
+import { QueryParamsDto } from '../../../super-admin/api/dto/query-params.dto';
+import { QueryMapHelpers } from '../../../public/infrastructure/query-map.helpers';
 
 @Injectable()
 export class BCommentsQueryRepository extends QueryMapHelpers {

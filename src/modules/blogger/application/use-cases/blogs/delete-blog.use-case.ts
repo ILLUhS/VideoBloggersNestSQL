@@ -1,6 +1,6 @@
-import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
-import { DeleteBlogCommand } from "./commands/delete-blog.command";
-import { BBlogsRepository } from "../../../infrastructure/repositories/b-blogs.repository";
+import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
+import { DeleteBlogCommand } from './commands/delete-blog.command';
+import { BBlogsRepository } from '../../../infrastructure/repositories/b-blogs.repository';
 
 @CommandHandler(DeleteBlogCommand)
 export class DeleteBlogUseCase implements ICommandHandler<DeleteBlogCommand> {

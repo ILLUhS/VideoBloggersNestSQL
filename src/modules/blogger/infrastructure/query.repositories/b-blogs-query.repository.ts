@@ -1,10 +1,58 @@
 import { Injectable } from '@nestjs/common';
 import { QueryParamsDto } from '../../../super-admin/api/dto/query-params.dto';
 import { BlogsQueryRepository } from '../../../public/infrastructure/query.repositories/blogs-query.repository';
+import format = require('pg-format');
 
 @Injectable()
 export class BBlogsQueryRepository extends BlogsQueryRepository {
-  async getBlogsByUserId(searchParams: QueryParamsDto, userId: string) {
+  async getBlogsByUserId(searchParams: QueryParamsDto, userId: number) {
+    const sql = format(
+      `SELECT
+                "id",
+                "name",
+                "description",
+                "websiteUrl",
+                "createdAt",
+                "isMembership"
+                FROM public."Blogs"
+                WHERE "userId" = %1$s
+                AND "name" ~* %2$L 
+                ORDER BY %5$I %6$s
+                LIMIT %3$L OFFSET %4$L;`,
+      userId,
+      searchParams.searchNameTerm,
+      searchParams.pageSize,
+      (searchParams.pageNumber - 1) * searchParams.pageSize,
+      searchParams.sortBy,
+      searchParams.sortDirection,
+    );
+    const blogs = await this.dataSource.query(sql);
+    const sqlCount = format(
+      `SELECT
+                COUNT(*)
+                FROM public."Blogs"
+                WHERE "userId" = %1$s
+                AND "name" ~* %2$L;`,
+      userId,
+      searchParams.searchNameTerm,
+    );
+    const blogsCount = Number((await this.dataSource.query(sqlCount))[0].count);
+    return {
+      pagesCount: Math.ceil(blogsCount / searchParams.pageSize),
+      page: searchParams.pageNumber,
+      pageSize: searchParams.pageSize,
+      totalCount: blogsCount,
+      items: blogs.map((blog) => ({
+        id: blog.id,
+        name: blog.name,
+        description: blog.description,
+        websiteUrl: blog.websiteUrl,
+        createdAt: blog.createdAt,
+        isMembership: blog.isMembership,
+      })),
+    };
+  }
+  /*async getBlogsByUserId(searchParams: QueryParamsDto, userId: string) {
     const blogs = await this.blogModel
       .find({
         userId: userId,
@@ -34,7 +82,7 @@ export class BBlogsQueryRepository extends BlogsQueryRepository {
         isMembership: blog.isMembership,
       })),
     };
-  }
+  }*/
   async getBanUsersByBlogId(searchParams: QueryParamsDto, blogId: string) {
     //ищем блог
     const blog = await this.blogModel.findOne({ id: blogId }).exec();
