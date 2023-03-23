@@ -1,9 +1,9 @@
-import { Injectable } from "@nestjs/common";
-import { InjectModel } from "@nestjs/mongoose";
-import { Post, PostModelType } from "../../../../domain/schemas/post.schema";
-import { QueryParamsDto } from "../../../super-admin/api/dto/query-params.dto";
-import { FilterQueryType } from "../../api/types/filter.query.type";
-import { QueryMapHelpers } from "../query-map.helpers";
+import { Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Post, PostModelType } from '../../../../domain/schemas/post.schema';
+import { QueryParamsDto } from '../../../super-admin/api/dto/query-params.dto';
+import { FilterQueryType } from '../../types/filter.query.type';
+import { QueryMapHelpers } from '../query-map.helpers';
 
 @Injectable()
 export class PostsQueryRepository extends QueryMapHelpers {

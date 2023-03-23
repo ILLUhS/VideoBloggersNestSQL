@@ -4,11 +4,11 @@ import {
   ForbiddenException,
   Injectable,
   NestInterceptor,
-  NotFoundException
-} from "@nestjs/common";
-import { Observable } from "rxjs";
-import { BBlogsService } from "../../../application/services/b-blogs.service";
-import RequestWithUser from "../../../../../api/interfaces/request-with-user.interface";
+  NotFoundException,
+} from '@nestjs/common';
+import { Observable } from 'rxjs';
+import { BBlogsService } from '../../../application/services/b-blogs.service';
+import RequestWithUser from '../../../../../api/interfaces/request-with-user.interface';
 
 @Injectable()
 export class CheckOwnerBlogInterceptor implements NestInterceptor {
@@ -22,9 +22,9 @@ export class CheckOwnerBlogInterceptor implements NestInterceptor {
       req.originalUrl.split('/')[2] === 'blogs' ||
       req.originalUrl.split('/')[3] === 'blog'
     ) {
-      let id: string;
-      if (req.params.id) id = req.params.id;
-      else if (req.params.blogId) id = req.params.blogId;
+      let id: number;
+      if (req.params.id) id = Number(req.params.id);
+      else if (req.params.blogId) id = Number(req.params.blogId);
       const blog = await this.blogsService.findBlogById(id);
       if (!blog) throw new NotFoundException();
       if (req.user.userId !== blog.userId) throw new ForbiddenException();

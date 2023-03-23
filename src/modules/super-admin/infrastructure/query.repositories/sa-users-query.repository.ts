@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { QueryParamsDto } from '../../api/dto/query-params.dto';
-import { UserViewType } from '../../../public/api/types/user.view.type';
+import { UserViewType } from '../../../public/types/user.view.type';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 import format = require('pg-format');

@@ -27,7 +27,7 @@ import { BlogUpdateDto } from '../../../public/application/types/blog.update.dto
 import { UpdateBlogCommand } from '../../application/use-cases/blogs/commands/update-blog.command';
 import { CheckOwnerBlogInterceptor } from './interceptors/check-owner-blog.interceptor';
 import { DeleteBlogCommand } from '../../application/use-cases/blogs/commands/delete-blog.command';
-import { BlogPostInputDto } from '../../../public/api/types/blog.post.input.dto';
+import { BlogPostInputDto } from '../../../public/types/blog.post.input.dto';
 import { PostCreateDto } from '../../../public/application/types/post.create.dto';
 import { CreatePostCommand } from '../../application/use-cases/posts/commands/create-post.command';
 import { BPostsQueryRepository } from '../../infrastructure/query.repositories/b-posts-query.repository';
@@ -36,6 +36,7 @@ import { UpdatePostCommand } from '../../application/use-cases/posts/commands/up
 import { PostUpdateDto } from '../../../public/application/types/post.update.dto';
 import { DeletePostCommand } from '../../application/use-cases/posts/commands/delete-post.command';
 import { BCommentsQueryRepository } from '../../infrastructure/query.repositories/b-comments-query.repository';
+import { IntTransformPipe } from '../../../public/api/pipes/int-transform.pipe';
 
 @SkipThrottle()
 @Controller('blogger/blogs')
@@ -108,7 +109,7 @@ export class BlogsPostsController {
   @HttpCode(204)
   @Put(':id')
   async updateBlogById(
-    @Param('id') id: string,
+    @Param('id', new IntTransformPipe()) id: number,
     @Body() blogDto: BlogUpdateDto,
   ) {
     const result = await this.commandBus.execute<
@@ -139,7 +140,7 @@ export class BlogsPostsController {
   @UseInterceptors(CheckOwnerBlogInterceptor)
   @HttpCode(204)
   @Delete(':id')
-  async deleteBlogById(@Param('id') id: string) {
+  async deleteBlogById(@Param('id', new IntTransformPipe()) id: number) {
     const result = await this.commandBus.execute<
       DeleteBlogCommand,
       Promise<boolean>

@@ -10,7 +10,7 @@ export class ConfirmRegistrationUseCase
 
   async execute(command: ConfirmRegistrationCommand): Promise<boolean> {
     const { code } = command;
-    const user = await this.usersRepository.findByField(
+    const user = await this.usersRepository.findOneByField(
       'emailConfirmationCode',
       code,
     );

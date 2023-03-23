@@ -7,6 +7,7 @@ import { UserInfoType } from '../../modules/blogger/types/user-info.type';
 import { BannedUsersType } from '../types/banned-users.type';
 import { BannedUserDtoType } from '../types/banned-user-dto.type';
 import { BlogCreateDtoType } from '../../modules/blogger/types/blog-create-dto.type';
+import { FoundBlogDtoType } from '../../modules/public/types/found-blog-dto.type';
 
 export type BlogDocument = HydratedDocument<Blog>;
 
@@ -41,7 +42,7 @@ export class Blog {
     this.isBanned = false;
   }
   @Prop({ required: true })
-  id: string;
+  id: number;
 
   @Prop({ required: true })
   name: string;
@@ -129,6 +130,18 @@ export class Blog {
   unban() {
     this.isBanned = false;
     this.banDate = null;
+  }
+
+  async setAll(blogDto: FoundBlogDtoType) {
+    this.id = blogDto.id;
+    this.name = blogDto.name;
+    this.description = blogDto.description;
+    this.websiteUrl = blogDto.websiteUrl;
+    this.createdAt = blogDto.createdAt;
+    this.isMembership = blogDto.isMembership;
+    this.userId = blogDto.userId;
+    this.isBanned = blogDto.isBanned;
+    this.banDate = blogDto.banDate;
   }
 }
 

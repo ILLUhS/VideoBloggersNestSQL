@@ -2,7 +2,7 @@ import { BlogUpdateDto } from '../../../../../public/application/types/blog.upda
 
 export class UpdateBlogCommand {
   constructor(
-    public readonly id: string,
+    public readonly id: number,
     public readonly blogDto: BlogUpdateDto,
   ) {}
 }

@@ -11,21 +11,21 @@ import {
   Query,
   Req,
   UseGuards,
-  UseInterceptors
-} from "@nestjs/common";
-import { QueryParamsDto } from "../../../super-admin/api/dto/query-params.dto";
-import { AuthHeaderInterceptor } from "./interceptors/auth.header.interceptor";
-import { CommentInputDto } from "../types/comment.input.dto";
-import { LikeStatusInputDto } from "../types/like.status.input.dto";
-import { SkipThrottle } from "@nestjs/throttler";
-import { QueryTransformPipe } from "../pipes/query-transform.pipe";
-import { CommandBus } from "@nestjs/cqrs";
-import { PostsQueryRepository } from "../../infrastructure/query.repositories/posts-query.repository";
-import RequestWithUser from "../../../../api/interfaces/request-with-user.interface";
-import { CommentsQueryRepository } from "../../infrastructure/query.repositories/comments-query.repository";
-import { CreateCommentCommand } from "../../application/use-cases/commenst/commands/create-comment.command";
-import { BearerAuthGuard } from "../../../auth/api/controllers/guards/bearer-auth.guard";
-import { CreateLikeDislikeCommand } from "../../application/use-cases/reactions/commands/create-like-dislike.command";
+  UseInterceptors,
+} from '@nestjs/common';
+import { QueryParamsDto } from '../../../super-admin/api/dto/query-params.dto';
+import { AuthHeaderInterceptor } from './interceptors/auth.header.interceptor';
+import { CommentInputDto } from '../../types/comment.input.dto';
+import { LikeStatusInputDto } from '../../types/like.status.input.dto';
+import { SkipThrottle } from '@nestjs/throttler';
+import { QueryTransformPipe } from '../pipes/query-transform.pipe';
+import { CommandBus } from '@nestjs/cqrs';
+import { PostsQueryRepository } from '../../infrastructure/query.repositories/posts-query.repository';
+import RequestWithUser from '../../../../api/interfaces/request-with-user.interface';
+import { CommentsQueryRepository } from '../../infrastructure/query.repositories/comments-query.repository';
+import { CreateCommentCommand } from '../../application/use-cases/commenst/commands/create-comment.command';
+import { BearerAuthGuard } from '../../../auth/api/controllers/guards/bearer-auth.guard';
+import { CreateLikeDislikeCommand } from '../../application/use-cases/reactions/commands/create-like-dislike.command';
 
 @SkipThrottle()
 @Controller('posts')

@@ -1,5 +1,5 @@
-import { IsEnum, IsString } from "class-validator";
-import { Transform, TransformFnParams } from "class-transformer";
+import { IsEnum, IsString } from 'class-validator';
+import { Transform, TransformFnParams } from 'class-transformer';
 
 export class LikeStatusInputDto {
   @IsString()

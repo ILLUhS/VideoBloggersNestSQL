@@ -10,6 +10,6 @@ export class SaUsersService {
     protected usersRepository: UsersRepository,
   ) {}
   async findUserById(userId: number): Promise<User | null> {
-    return await this.usersRepository.findByField('id', userId);
+    return await this.usersRepository.findOneByField('id', userId);
   }
 }

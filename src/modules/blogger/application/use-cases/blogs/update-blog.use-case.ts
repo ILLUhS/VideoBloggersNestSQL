@@ -16,13 +16,13 @@ export class UpdateBlogUseCase implements ICommandHandler<UpdateBlogCommand> {
     const blog = await this.blogsRepository.findById(id);
     if (!blog) throw new NotFoundException();
     blog.updateProperties(blogDto);
-    const posts = await this.postsRepository.findPostsByBlogId(id);
+    /*const posts = await this.postsRepository.findPostsByBlogId(id);
     if (posts) {
       posts.forEach((p) => {
         p.updateBlogName(blogDto.name);
         this.postsRepository.save(p);
       });
-    }
-    return await this.blogsRepository.save(blog);
+    }*/
+    return await this.blogsRepository.update(blog);
   }
 }

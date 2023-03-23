@@ -1,5 +1,5 @@
-import { IsString, Length } from "class-validator";
-import { Transform, TransformFnParams } from "class-transformer";
+import { IsString, Length } from 'class-validator';
+import { Transform, TransformFnParams } from 'class-transformer';
 
 export class CommentInputDto {
   @IsString()

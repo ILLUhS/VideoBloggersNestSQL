@@ -1,10 +1,13 @@
-import { Injectable } from "@nestjs/common";
-import { InjectModel } from "@nestjs/mongoose";
-import { Comment, CommentModelType } from "../../../../domain/schemas/comment.schema";
-import { CommentsViewType } from "../../api/types/comment.view.type";
-import { QueryParamsDto } from "../../../super-admin/api/dto/query-params.dto";
-import { FilterQueryType } from "../../api/types/filter.query.type";
-import { QueryMapHelpers } from "../query-map.helpers";
+import { Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import {
+  Comment,
+  CommentModelType,
+} from '../../../../domain/schemas/comment.schema';
+import { CommentsViewType } from '../../types/comment.view.type';
+import { QueryParamsDto } from '../../../super-admin/api/dto/query-params.dto';
+import { FilterQueryType } from '../../types/filter.query.type';
+import { QueryMapHelpers } from '../query-map.helpers';
 
 @Injectable()
 export class CommentsQueryRepository extends QueryMapHelpers {

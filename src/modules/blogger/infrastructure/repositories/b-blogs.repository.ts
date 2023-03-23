@@ -38,17 +38,110 @@ export class BBlogsRepository {
     );
     return result[0].id;
   }
-  async findById(id: string): Promise<BlogDocument | null> {
+  async update(blog: Blog): Promise<boolean> {
+    const result = await this.dataSource.query(
+      `UPDATE public."Blogs"
+                SET 
+                "name"=$2, 
+                "description"=$3, 
+                "websiteUrl"=$4, 
+                "createdAt"=$5, 
+                "isMembership"=$6, 
+                "userId"=$7, 
+                "isBanned"=$8, 
+                "banDate"=$9
+              WHERE "id" = $1;`,
+      [
+        blog.id,
+        blog.name,
+        blog.description,
+        blog.websiteUrl,
+        blog.createdAt,
+        blog.isMembership,
+        blog.userId,
+        blog.isBanned,
+        blog.banDate,
+      ],
+    );
+    return !!result;
+  }
+  async findById(id: number): Promise<Blog | null> {
+    const foundBlog = await this.dataSource.query(
+      `SELECT
+                "id",
+                "name",
+                "description",
+                "websiteUrl",
+                "createdAt",
+                "isMembership",
+                "userId",
+                "isBanned",
+                "banDate"
+                FROM public."Blogs"
+                WHERE "id" = $1;`,
+      [id],
+    );
+    if (!foundBlog.length) return null;
+    const blog = new Blog({
+      name: foundBlog[0].name,
+      description: foundBlog[0].description,
+      websiteUrl: foundBlog[0].websiteUrl,
+      userId: foundBlog[0].userId,
+    });
+    await blog.setAll(foundBlog[0]);
+    return blog;
+  }
+  async findByUserId(userId: number): Promise<Blog[] | null> {
+    const foundBlogs = await this.dataSource.query(
+      `SELECT
+                "id",
+                "name",
+                "description",
+                "websiteUrl",
+                "createdAt",
+                "isMembership",
+                "userId",
+                "isBanned",
+                "banDate"
+                FROM public."Blogs"
+                WHERE "userId" = $1;`,
+      [userId],
+    );
+    if (!foundBlogs.length) return null;
+    const blogs: Blog[] = [];
+    for (const b of foundBlogs) {
+      const blog = new Blog({
+        name: b.name,
+        description: b.description,
+        websiteUrl: b.websiteUrl,
+        userId: b.userId,
+      });
+      await blog.setAll(b);
+      blogs.push(blog);
+    }
+    return blogs;
+  }
+  async deleteById(id: number): Promise<boolean> {
+    const result = await this.dataSource.query(
+      `DELETE FROM public."Blogs"
+              WHERE "id" = $1
+              RETURNING "id";`,
+      [id],
+    );
+    if (!result.length) return false;
+    return true;
+  }
+  /*async findById(id: string): Promise<BlogDocument | null> {
     return this.blogModel.findOne({ id: id });
-  }
-  async findByUserId(userId: string): Promise<BlogDocument[] | null> {
+  }*/
+  /*async findByUserId(userId: string): Promise<BlogDocument[] | null> {
     return this.blogModel.find({ userId: userId }).exec();
-  }
-  async deleteById(id: string): Promise<boolean> {
+  }*/
+  /*async deleteById(id: string): Promise<boolean> {
     return (
       (await this.blogModel.deleteOne({ id: id }).exec()).deletedCount === 1
     );
-  }
+  }*/
   async deleteAll(): Promise<boolean> {
     return (await this.blogModel.deleteMany().exec()).acknowledged;
   }

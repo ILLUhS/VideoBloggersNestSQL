@@ -17,7 +17,7 @@ export class PassRecoveryUseCase
 
   async execute(command: PassRecoveryCommand): Promise<boolean> {
     const { email } = command;
-    const user = await this.usersRepository.findByField('email', email);
+    const user = await this.usersRepository.findOneByField('email', email);
     if (!user) return false;
     let passRec = await this.passRecRepository.findByField('userId', user.id);
     if (!passRec) {

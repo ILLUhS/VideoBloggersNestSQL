@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Blog, BlogModelType } from '../../../../domain/schemas/blog.schema';
 import { QueryParamsDto } from '../../../super-admin/api/dto/query-params.dto';
-import { BlogsViewType } from '../../api/types/blog.view.type';
+import { BlogsViewType } from '../../types/blog.view.type';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 

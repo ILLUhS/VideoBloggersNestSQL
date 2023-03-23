@@ -39,7 +39,7 @@ export class UsersRepository {
     );
     return result[0].id;
   }
-  async findByField(field: string, value: any): Promise<User | null> {
+  async findOneByField(field: string, value: any): Promise<User | null> {
     const foundUser = await this.dataSource.query(
       `SELECT
                 "id",

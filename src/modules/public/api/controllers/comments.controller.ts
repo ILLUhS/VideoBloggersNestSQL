@@ -10,20 +10,20 @@ import {
   Put,
   Req,
   UseGuards,
-  UseInterceptors
-} from "@nestjs/common";
-import { AuthHeaderInterceptor } from "./interceptors/auth.header.interceptor";
-import { CommentUpdateDto } from "../../application/types/comment.update.dto";
-import { CheckOwnerCommentInterceptor } from "./interceptors/check.owner.comment.interceptor";
-import { LikeStatusInputDto } from "../types/like.status.input.dto";
-import { SkipThrottle } from "@nestjs/throttler";
-import { CommentsQueryRepository } from "../../infrastructure/query.repositories/comments-query.repository";
-import RequestWithUser from "../../../../api/interfaces/request-with-user.interface";
-import { BearerAuthGuard } from "../../../auth/api/controllers/guards/bearer-auth.guard";
-import { CommandBus } from "@nestjs/cqrs";
-import { UpdateCommentCommand } from "../../application/use-cases/commenst/commands/update-comment.command";
-import { DeleteCommentCommand } from "../../application/use-cases/commenst/commands/delete-comment.command";
-import { CreateLikeDislikeCommand } from "../../application/use-cases/reactions/commands/create-like-dislike.command";
+  UseInterceptors,
+} from '@nestjs/common';
+import { AuthHeaderInterceptor } from './interceptors/auth.header.interceptor';
+import { CommentUpdateDto } from '../../application/types/comment.update.dto';
+import { CheckOwnerCommentInterceptor } from './interceptors/check.owner.comment.interceptor';
+import { LikeStatusInputDto } from '../../types/like.status.input.dto';
+import { SkipThrottle } from '@nestjs/throttler';
+import { CommentsQueryRepository } from '../../infrastructure/query.repositories/comments-query.repository';
+import RequestWithUser from '../../../../api/interfaces/request-with-user.interface';
+import { BearerAuthGuard } from '../../../auth/api/controllers/guards/bearer-auth.guard';
+import { CommandBus } from '@nestjs/cqrs';
+import { UpdateCommentCommand } from '../../application/use-cases/commenst/commands/update-comment.command';
+import { DeleteCommentCommand } from '../../application/use-cases/commenst/commands/delete-comment.command';
+import { CreateLikeDislikeCommand } from '../../application/use-cases/reactions/commands/create-like-dislike.command';
 
 @SkipThrottle()
 @Controller('comments')

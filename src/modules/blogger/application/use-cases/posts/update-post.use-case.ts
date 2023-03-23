@@ -14,8 +14,8 @@ export class UpdatePostUseCase implements ICommandHandler<UpdatePostCommand> {
   async execute(command: UpdatePostCommand): Promise<boolean> {
     const { blogIdPostIdDto, postDto } = command;
     const foundBlog = await this.blogsRepository.findById(
-      blogIdPostIdDto.blogId,
-    );
+      +blogIdPostIdDto.blogId,
+    ); //todo remove '+'
     if (!foundBlog) throw new NotFoundException();
     const post = await this.postsRepository.findById(blogIdPostIdDto.postId);
     if (!post) throw new NotFoundException();

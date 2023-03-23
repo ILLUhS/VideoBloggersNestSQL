@@ -1,8 +1,8 @@
-import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
-import { BanUnbanBlogCommand } from "./commands/ban-unban-blog.command";
-import { SaPostsRepository } from "../../../infrastructure/repositories/sa-posts.repository";
-import { SaBlogsRepository } from "../../../infrastructure/repositories/sa-blogs.repository";
-import { BadRequestException } from "@nestjs/common";
+import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
+import { BanUnbanBlogCommand } from './commands/ban-unban-blog.command';
+import { SaPostsRepository } from '../../../infrastructure/repositories/sa-posts.repository';
+import { SaBlogsRepository } from '../../../infrastructure/repositories/sa-blogs.repository';
+import { BadRequestException } from '@nestjs/common';
 
 @CommandHandler(BanUnbanBlogCommand)
 export class BanUnbanBlogUseCase
