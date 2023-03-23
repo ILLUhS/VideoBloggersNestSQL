@@ -76,7 +76,7 @@ export class BlogsPostsController {
   async createBlog(@Body() blogDto: BlogInputDto, @Req() req: RequestWithUser) {
     const blogId = await this.commandBus.execute<
       CreateBlogCommand,
-      Promise<string>
+      Promise<number>
     >(new CreateBlogCommand(blogDto, req.user.userId));
     return await this.blogsQueryRepository.findBlogById(blogId);
   }

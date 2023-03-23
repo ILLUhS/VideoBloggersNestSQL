@@ -1,15 +1,9 @@
-import { Injectable } from "@nestjs/common";
-import { InjectModel } from "@nestjs/mongoose";
-import { Blog, BlogModelType } from "../../../../domain/schemas/blog.schema";
-import { QueryParamsDto } from "../../../super-admin/api/dto/query-params.dto";
-import { BlogsQueryRepository } from "../../../public/infrastructure/query.repositories/blogs-query.repository";
+import { Injectable } from '@nestjs/common';
+import { QueryParamsDto } from '../../../super-admin/api/dto/query-params.dto';
+import { BlogsQueryRepository } from '../../../public/infrastructure/query.repositories/blogs-query.repository';
 
 @Injectable()
 export class BBlogsQueryRepository extends BlogsQueryRepository {
-  constructor(@InjectModel(Blog.name) protected blogModel: BlogModelType) {
-    super(blogModel);
-  }
-
   async getBlogsByUserId(searchParams: QueryParamsDto, userId: string) {
     const blogs = await this.blogModel
       .find({

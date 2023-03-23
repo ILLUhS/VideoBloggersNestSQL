@@ -25,11 +25,11 @@ export class BBlogsRepository {
                 "isMembership", 
                 "userId", 
                 "isBanned")
-                VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING "id";`,
+                VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING "id";`,
       [
         blog.name,
         blog.description,
-        blog.createdAt,
+        blog.websiteUrl,
         blog.createdAt,
         blog.isMembership,
         blog.userId,

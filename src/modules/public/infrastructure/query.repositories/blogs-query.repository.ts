@@ -1,12 +1,17 @@
-import { Injectable } from "@nestjs/common";
-import { InjectModel } from "@nestjs/mongoose";
-import { Blog, BlogModelType } from "../../../../domain/schemas/blog.schema";
-import { QueryParamsDto } from "../../../super-admin/api/dto/query-params.dto";
-import { BlogsViewType } from "../../api/types/blog.view.type";
+import { Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Blog, BlogModelType } from '../../../../domain/schemas/blog.schema';
+import { QueryParamsDto } from '../../../super-admin/api/dto/query-params.dto';
+import { BlogsViewType } from '../../api/types/blog.view.type';
+import { InjectDataSource } from '@nestjs/typeorm';
+import { DataSource } from 'typeorm';
 
 @Injectable()
 export class BlogsQueryRepository {
-  constructor(@InjectModel(Blog.name) protected blogModel: BlogModelType) {}
+  constructor(
+    @InjectDataSource() protected dataSource: DataSource,
+    @InjectModel(Blog.name) protected blogModel: BlogModelType,
+  ) {}
 
   async getBlogsWithQueryParam(searchParams: QueryParamsDto) {
     const blogs = await this.blogModel
@@ -47,7 +52,30 @@ export class BlogsQueryRepository {
       })),
     };
   }
-  async findBlogById(id: string): Promise<BlogsViewType | null> {
+  async findBlogById(id: number): Promise<BlogsViewType | null> {
+    const blog = await this.dataSource.query(
+      `SELECT
+                "id",
+                "name",
+                "description",
+                "websiteUrl",
+                "createdAt",
+                "isMembership"
+                FROM public."Blogs"
+                WHERE "id" = $1;`,
+      [id],
+    );
+    if (!blog.length) return null;
+    return {
+      id: String(blog[0].id),
+      name: blog[0].name,
+      description: blog[0].description,
+      websiteUrl: blog[0].websiteUrl,
+      createdAt: blog[0].createdAt,
+      isMembership: blog[0].isMembership,
+    };
+  }
+  /*async findBlogById(id: string): Promise<BlogsViewType | null> {
     return await this.blogModel
       .findOne({ id: id })
       .where({ isBanned: false })
@@ -61,5 +89,5 @@ export class BlogsQueryRepository {
         isMembership: 1,
       })
       .exec();
-  }
+  }*/
 }

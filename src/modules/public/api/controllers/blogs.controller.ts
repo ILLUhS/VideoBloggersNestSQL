@@ -1,11 +1,20 @@
-import { Controller, Get, NotFoundException, Param, Query, Req, UseInterceptors } from "@nestjs/common";
-import { QueryParamsDto } from "../../../super-admin/api/dto/query-params.dto";
-import { AuthHeaderInterceptor } from "./interceptors/auth.header.interceptor";
-import { SkipThrottle } from "@nestjs/throttler";
-import { QueryTransformPipe } from "../pipes/query-transform.pipe";
-import { BlogsQueryRepository } from "../../infrastructure/query.repositories/blogs-query.repository";
-import RequestWithUser from "../../../../api/interfaces/request-with-user.interface";
-import { PostsQueryRepository } from "../../infrastructure/query.repositories/posts-query.repository";
+import {
+  Controller,
+  Get,
+  NotFoundException,
+  Param,
+  Query,
+  Req,
+  UseInterceptors,
+} from '@nestjs/common';
+import { QueryParamsDto } from '../../../super-admin/api/dto/query-params.dto';
+import { AuthHeaderInterceptor } from './interceptors/auth.header.interceptor';
+import { SkipThrottle } from '@nestjs/throttler';
+import { QueryTransformPipe } from '../pipes/query-transform.pipe';
+import { BlogsQueryRepository } from '../../infrastructure/query.repositories/blogs-query.repository';
+import RequestWithUser from '../../../../api/interfaces/request-with-user.interface';
+import { PostsQueryRepository } from '../../infrastructure/query.repositories/posts-query.repository';
+import { IntTransformPipe } from '../pipes/int-transform.pipe';
 
 @SkipThrottle()
 @Controller('blogs')
@@ -21,7 +30,7 @@ export class BlogsController {
   }
 
   @Get(':id')
-  async findById(@Param('id') id: string) {
+  async findById(@Param('id', new IntTransformPipe()) id: number) {
     const blog = await this.blogsQueryRepository.findBlogById(id);
     if (!blog) throw new NotFoundException();
     return blog;
@@ -30,7 +39,7 @@ export class BlogsController {
   @UseInterceptors(AuthHeaderInterceptor)
   @Get(':id/posts')
   async findPostsByBlogId(
-    @Param('id') id: string,
+    @Param('id', new IntTransformPipe()) id: number,
     @Query(new QueryTransformPipe()) query: QueryParamsDto,
     @Req() req: RequestWithUser,
   ) {
