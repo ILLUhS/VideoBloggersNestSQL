@@ -1,9 +1,9 @@
-import { BanUserForBlogInputDto } from "../../../../api/input.dto/ban-user-for-blog-input.dto";
+import { BanUserForBlogInputDto } from '../../../../api/input.dto/ban-user-for-blog-input.dto';
 
 export class BanUserForBlogCommand {
   constructor(
-    public readonly userId: string,
-    public readonly bloggerId: string,
+    public readonly userId: number,
+    public readonly bloggerId: number,
     public readonly banDto: BanUserForBlogInputDto,
   ) {}
 }

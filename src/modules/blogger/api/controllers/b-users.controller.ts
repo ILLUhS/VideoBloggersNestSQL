@@ -1,14 +1,26 @@
-import { Body, Controller, Get, HttpCode, Param, Put, Query, Req, UseGuards, UseInterceptors } from "@nestjs/common";
-import { SkipThrottle } from "@nestjs/throttler";
-import { CommandBus } from "@nestjs/cqrs";
-import { BanUserForBlogInputDto } from "../input.dto/ban-user-for-blog-input.dto";
-import { BearerAuthGuard } from "../../../auth/api/controllers/guards/bearer-auth.guard";
-import { BanUserForBlogCommand } from "../../application/use-cases/users/commands/ban-user-for-blog.command";
-import RequestWithUser from "../../../../api/interfaces/request-with-user.interface";
-import { QueryTransformPipe } from "../../../public/api/pipes/query-transform.pipe";
-import { QueryParamsDto } from "../../../super-admin/api/dto/query-params.dto";
-import { BBlogsQueryRepository } from "../../infrastructure/query.repositories/b-blogs-query.repository";
-import { CheckOwnerBlogInterceptor } from "./interceptors/check-owner-blog.interceptor";
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  Param,
+  Put,
+  Query,
+  Req,
+  UseGuards,
+  UseInterceptors,
+} from '@nestjs/common';
+import { SkipThrottle } from '@nestjs/throttler';
+import { CommandBus } from '@nestjs/cqrs';
+import { BanUserForBlogInputDto } from '../input.dto/ban-user-for-blog-input.dto';
+import { BearerAuthGuard } from '../../../auth/api/controllers/guards/bearer-auth.guard';
+import { BanUserForBlogCommand } from '../../application/use-cases/users/commands/ban-user-for-blog.command';
+import RequestWithUser from '../../../../api/interfaces/request-with-user.interface';
+import { QueryTransformPipe } from '../../../public/api/pipes/query-transform.pipe';
+import { QueryParamsDto } from '../../../super-admin/api/dto/query-params.dto';
+import { BBlogsQueryRepository } from '../../infrastructure/query.repositories/b-blogs-query.repository';
+import { CheckOwnerBlogInterceptor } from './interceptors/check-owner-blog.interceptor';
+import { IntTransformPipe } from '../../../public/api/pipes/int-transform.pipe';
 
 @SkipThrottle()
 @Controller('blogger/users')
@@ -32,7 +44,7 @@ export class BUsersController {
   @UseGuards(BearerAuthGuard)
   @Put(':id/ban')
   async banUnbanUser(
-    @Param('id') id: string,
+    @Param('id', new IntTransformPipe()) id: number,
     @Body() banDto: BanUserForBlogInputDto,
     @Req() req: RequestWithUser,
   ) {
