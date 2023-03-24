@@ -86,9 +86,8 @@ export class BlogsPostsController {
   @UseInterceptors(CheckOwnerBlogInterceptor)
   @Post(':blogId/posts')
   async createPostByBlogId(
-    @Param('blogId') id: string,
+    @Param('blogId', new IntTransformPipe()) id: number,
     @Body() postDto: BlogPostInputDto,
-    @Req() req: RequestWithUser,
   ) {
     const postCreateDto: PostCreateDto = {
       title: postDto.title,
@@ -98,9 +97,8 @@ export class BlogsPostsController {
     };
     const postId = await this.commandBus.execute<
       CreatePostCommand,
-      Promise<string | null>
-    >(new CreatePostCommand(postCreateDto, req.user.userId));
-    if (!postId) throw new InternalServerErrorException();
+      Promise<string> //todo number
+    >(new CreatePostCommand(postCreateDto));
     return await this.postsQueryRepository.findPostById(postId);
   }
 

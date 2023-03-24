@@ -9,14 +9,12 @@ import { BPostsService } from '../../../application/services/b-posts.service';
 @Injectable()
 export class PostIdValidator implements ValidatorConstraintInterface {
   constructor(private postsService: BPostsService) {}
-
-  //todo number
-  async validate(postId: string): Promise<boolean> {
+  async validate(postId: number): Promise<boolean> {
     const post = await this.postsService.findPostById(postId);
     if (!post) throw new NotFoundException();
     return true;
   }
   defaultMessage() {
-    return `blogId incorrect`;
+    return `postId incorrect`;
   }
 }

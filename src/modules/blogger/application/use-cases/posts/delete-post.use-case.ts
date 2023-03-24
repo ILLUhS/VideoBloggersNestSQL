@@ -13,7 +13,7 @@ export class DeletePostUseCase implements ICommandHandler<DeletePostCommand> {
 
   async execute(command: DeletePostCommand): Promise<boolean> {
     const { postId, blogId } = command.BlogIdPostIdDto;
-    const blog = await this.blogsService.findBlogById(+blogId); //todo remove '+'
+    const blog = await this.blogsService.findBlogById(blogId);
     if (!blog) throw new NotFoundException();
     return await this.postsRepository.deleteById(postId);
   }

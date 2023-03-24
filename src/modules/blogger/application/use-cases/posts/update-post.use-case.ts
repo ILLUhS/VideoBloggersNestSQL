@@ -14,12 +14,12 @@ export class UpdatePostUseCase implements ICommandHandler<UpdatePostCommand> {
   async execute(command: UpdatePostCommand): Promise<boolean> {
     const { blogIdPostIdDto, postDto } = command;
     const foundBlog = await this.blogsRepository.findById(
-      +blogIdPostIdDto.blogId,
-    ); //todo remove '+'
+      blogIdPostIdDto.blogId,
+    );
     if (!foundBlog) throw new NotFoundException();
     const post = await this.postsRepository.findById(blogIdPostIdDto.postId);
     if (!post) throw new NotFoundException();
     post.updateProperties(postDto);
-    return await this.postsRepository.save(post);
+    return await this.postsRepository.update(post);
   }
 }
