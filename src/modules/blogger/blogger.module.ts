@@ -13,7 +13,6 @@ import { BPostsService } from './application/services/b-posts.service';
 import { BBlogsRepository } from './infrastructure/repositories/b-blogs.repository';
 import { BPostsRepository } from './infrastructure/repositories/b-posts.repository';
 import { BBlogsQueryRepository } from './infrastructure/query.repositories/b-blogs-query.repository';
-import { BPostsQueryRepository } from './infrastructure/query.repositories/b-posts-query.repository';
 import { BlogsPostsController } from './api/controllers/blogs-posts.controller';
 import { PublicModule } from '../public/public.module';
 import { PostIdValidator } from './api/controllers/validators/post-id.validator';
@@ -23,6 +22,7 @@ import { BUsersRepository } from './infrastructure/repositories/b-users.reposito
 import { BBlogIdValidator } from './api/controllers/validators/b-blog.id.validator';
 import { BCommentsQueryRepository } from './infrastructure/query.repositories/b-comments-query.repository';
 import { BannedUserForBlogRepository } from './infrastructure/repositories/banned-user-for-blog.repository';
+import { PostsQueryRepository } from '../public/infrastructure/query.repositories/posts-query.repository';
 
 const useCases = [
   CreateBlogUseCase,
@@ -42,7 +42,7 @@ const repositories = [
 ];
 const queryRepositories = [
   BBlogsQueryRepository,
-  BPostsQueryRepository,
+  PostsQueryRepository,
   BCommentsQueryRepository,
 ];
 const validators = [BBlogIdValidator, PostIdValidator];
