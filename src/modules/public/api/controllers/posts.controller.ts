@@ -25,7 +25,8 @@ import RequestWithUser from '../../../../api/interfaces/request-with-user.interf
 import { CommentsQueryRepository } from '../../infrastructure/query.repositories/comments-query.repository';
 import { CreateCommentCommand } from '../../application/use-cases/commenst/commands/create-comment.command';
 import { BearerAuthGuard } from '../../../auth/api/controllers/guards/bearer-auth.guard';
-import { CreateLikeDislikeCommand } from '../../application/use-cases/reactions/commands/create-like-dislike.command';
+import { IntTransformPipe } from '../pipes/int-transform.pipe';
+import { CreateLikeDislikeForPostCommand } from '../../application/use-cases/reactions/commands/create-like-dislike-for-post.command';
 
 @SkipThrottle()
 @Controller('posts')
@@ -81,7 +82,7 @@ export class PostsController {
   @UseGuards(BearerAuthGuard)
   @Post(':id/comments')
   async createCommentByPostId(
-    @Param('id') id: string,
+    @Param('id', new IntTransformPipe()) id: number,
     @Body() commentDto: CommentInputDto,
     @Req() req: RequestWithUser,
   ) {
@@ -91,8 +92,7 @@ export class PostsController {
     >(
       new CreateCommentCommand({
         content: commentDto.content,
-        userId: req.user['userId'],
-        userLogin: req.user['login'],
+        userId: req.user.userId,
         postId: id,
       }),
     );
@@ -104,21 +104,16 @@ export class PostsController {
   @HttpCode(204)
   @Put(':id/like-status')
   async setLikeDislike(
-    @Param('id') id: string,
+    @Param('id', new IntTransformPipe()) id: number,
     @Body() likeStatusInputDto: LikeStatusInputDto,
     @Req() req: RequestWithUser,
   ) {
-    const post = await this.postsQueryRepository.findPostById(id);
-    if (!post) throw new NotFoundException();
-    const result = await this.commandBus.execute(
-      new CreateLikeDislikeCommand({
+    return await this.commandBus.execute(
+      new CreateLikeDislikeForPostCommand({
         userId: req.user.userId,
-        login: req.user.login,
         reaction: likeStatusInputDto.likeStatus,
-        entityId: id,
+        postId: id,
       }),
     );
-    if (!result) throw new InternalServerErrorException();
-    return;
   }
 }

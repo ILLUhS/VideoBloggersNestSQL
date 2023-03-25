@@ -8,7 +8,7 @@ import { CommentsService } from './application/services/comments.service';
 import { CreateCommentUseCase } from './application/use-cases/commenst/create-comment.use-case';
 import { DeleteCommentUseCase } from './application/use-cases/commenst/delete-comment.use-case';
 import { UpdateCommentUseCase } from './application/use-cases/commenst/update-comment.use-case';
-import { CreateLikeDislikeUseCase } from './application/use-cases/reactions/create-like-dislike.use-case';
+import { CreateLikeDislikeForCommentUseCase } from './application/use-cases/reactions/create-like-dislike-for-comment.use-case';
 import { CommentsQueryRepository } from './infrastructure/query.repositories/comments-query.repository';
 import { BlogsRepository } from './infrastructure/repositories/blogs.repository';
 import { PostsRepository } from './infrastructure/repositories/posts.repository';
@@ -29,7 +29,7 @@ const useCases = [
   CreateCommentUseCase,
   UpdateCommentUseCase,
   DeleteCommentUseCase,
-  CreateLikeDislikeUseCase,
+  CreateLikeDislikeForCommentUseCase,
 ];
 const services = [CommentsService];
 const repositories = [

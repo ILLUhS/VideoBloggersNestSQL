@@ -23,7 +23,8 @@ import { BearerAuthGuard } from '../../../auth/api/controllers/guards/bearer-aut
 import { CommandBus } from '@nestjs/cqrs';
 import { UpdateCommentCommand } from '../../application/use-cases/commenst/commands/update-comment.command';
 import { DeleteCommentCommand } from '../../application/use-cases/commenst/commands/delete-comment.command';
-import { CreateLikeDislikeCommand } from '../../application/use-cases/reactions/commands/create-like-dislike.command';
+import { CreateLikeDislikeForCommentCommand } from '../../application/use-cases/reactions/commands/create-like-dislike-for-comment.command';
+import { IntTransformPipe } from '../pipes/int-transform.pipe';
 
 @SkipThrottle()
 @Controller('comments')
@@ -49,7 +50,7 @@ export class CommentsController {
   @HttpCode(204)
   @Put(':id')
   async updComment(
-    @Param('id') id: string,
+    @Param('id', new IntTransformPipe()) id: number,
     @Body() commentDto: CommentUpdateDto,
   ) {
     const result = await this.commandBus.execute<
@@ -64,29 +65,24 @@ export class CommentsController {
   @HttpCode(204)
   @Put(':id/like-status')
   async setLikeDislike(
-    @Param('id') id: string,
+    @Param('id', new IntTransformPipe()) id: number,
     @Body() likeStatusInputDto: LikeStatusInputDto,
     @Req() req: RequestWithUser,
   ) {
-    const comment = await this.commentsQueryRepository.findCommentById(id);
-    if (!comment) throw new NotFoundException();
-    const result = await this.commandBus.execute(
-      new CreateLikeDislikeCommand({
+    return await this.commandBus.execute(
+      new CreateLikeDislikeForCommentCommand({
         userId: req.user.userId,
-        login: req.user.login,
         reaction: likeStatusInputDto.likeStatus,
-        entityId: id,
+        commentId: id,
       }),
     );
-    if (!result) throw new InternalServerErrorException();
-    return;
   }
 
   @UseGuards(BearerAuthGuard)
   @UseInterceptors(CheckOwnerCommentInterceptor)
   @HttpCode(204)
   @Delete(':id')
-  async deleteComment(@Param('id') id: string) {
+  async deleteComment(@Param('id', new IntTransformPipe()) id: number) {
     const result = this.commandBus.execute<
       DeleteCommentCommand,
       Promise<boolean>

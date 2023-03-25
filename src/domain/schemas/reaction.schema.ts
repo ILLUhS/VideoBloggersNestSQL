@@ -1,7 +1,6 @@
 import { HydratedDocument, Model } from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { ReactionCreateDtoType } from '../../modules/public/application/types/reaction.create.dto.type';
-import { v4 as uuidv4 } from 'uuid';
+import { ReactionForPostCreateDtoType } from '../../modules/public/application/types/reaction-for-post-create-dto.type';
 
 export type ReactionDocument = HydratedDocument<Reaction>;
 
@@ -11,7 +10,7 @@ export type ReactionModelMethods = {
 };
 export type ReactionModelStaticMethods = {
   makeInstance(
-    reactionDto: ReactionCreateDtoType,
+    reactionDto: ReactionForPostCreateDtoType,
     ReactionModel: ReactionModelType,
   ): ReactionDocument;
 };
@@ -50,8 +49,8 @@ export class Reaction {
     this.isBanned = isBanned;
   }
 
-  static makeInstance(
-    reactionDto: ReactionCreateDtoType,
+  /*static makeInstance(
+    reactionDto: ReactionForPostCreateDtoType,
     ReactionModel: ReactionModelType,
   ): ReactionDocument {
     return new ReactionModel({
@@ -63,11 +62,11 @@ export class Reaction {
       createdAt: new Date(),
       isBanned: false,
     });
-  }
+  }*/
 }
 
 export const ReactionSchema = SchemaFactory.createForClass(Reaction);
-ReactionSchema.statics = { makeInstance: Reaction.makeInstance };
+//ReactionSchema.statics = { makeInstance: Reaction.makeInstance };
 ReactionSchema.methods = {
   setStatus: Reaction.prototype.setStatus,
   setBanStatus: Reaction.prototype.setBanStatus,

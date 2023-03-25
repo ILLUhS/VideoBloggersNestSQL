@@ -5,7 +5,7 @@ import {
   ReactionModelType,
 } from '../../../../domain/schemas/reaction.schema';
 import { InjectModel } from '@nestjs/mongoose';
-import { ReactionCreateDtoType } from '../../application/types/reaction.create.dto.type';
+import { ReactionForPostCreateDtoType } from '../../application/types/reaction-for-post-create-dto.type';
 
 @Injectable()
 export class ReactionsRepository {
@@ -13,7 +13,9 @@ export class ReactionsRepository {
     @InjectModel(Reaction.name) protected reactionModel: ReactionModelType,
   ) {}
 
-  async create(reactionDto: ReactionCreateDtoType): Promise<ReactionDocument> {
+  async create(
+    reactionDto: ReactionForPostCreateDtoType,
+  ): Promise<ReactionDocument> {
     return this.reactionModel.makeInstance(reactionDto, this.reactionModel);
   }
   async save(like: ReactionDocument) {
