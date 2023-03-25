@@ -25,6 +25,7 @@ export class CheckOwnerBlogInterceptor implements NestInterceptor {
       let id: number;
       if (req.params.id) id = Number(req.params.id);
       else if (req.params.blogId) id = Number(req.params.blogId);
+      if (isNaN(id)) throw new NotFoundException();
       const blog = await this.blogsService.findBlogById(id);
       if (!blog) throw new NotFoundException();
       if (req.user.userId !== blog.userId) throw new ForbiddenException();

@@ -24,11 +24,17 @@ import { Post, PostSchema } from '../../domain/schemas/post.schema';
 import { Comment, CommentSchema } from '../../domain/schemas/comment.schema';
 import { Reaction, ReactionSchema } from '../../domain/schemas/reaction.schema';
 import { QueryTransformPipe } from './api/pipes/query-transform.pipe';
+import { LikeForCommentRepository } from './infrastructure/repositories/like-for-comment.repository';
+import { LikeForPostRepository } from './infrastructure/repositories/like-for-post.repository';
+import { CreateLikeDislikeForPostCommand } from './application/use-cases/reactions/commands/create-like-dislike-for-post.command';
+import { BannedUserForBlogRepository } from './infrastructure/repositories/banned-user-for-blog.repository';
+import { IntTransformPipe } from './api/pipes/int-transform.pipe';
 
 const useCases = [
   CreateCommentUseCase,
   UpdateCommentUseCase,
   DeleteCommentUseCase,
+  CreateLikeDislikeForPostCommand,
   CreateLikeDislikeForCommentUseCase,
 ];
 const services = [CommentsService];
@@ -36,6 +42,9 @@ const repositories = [
   BlogsRepository,
   PostsRepository,
   CommentsRepository,
+  LikeForPostRepository,
+  LikeForCommentRepository,
+  BannedUserForBlogRepository,
   ReactionsRepository,
 ];
 const queryRepositories = [
@@ -45,6 +54,7 @@ const queryRepositories = [
 ];
 const interceptors = [AuthHeaderInterceptor, CheckOwnerCommentInterceptor];
 
+const pipes = [QueryTransformPipe, IntTransformPipe];
 @Module({
   imports: [
     AuthModule,
@@ -63,8 +73,8 @@ const interceptors = [AuthHeaderInterceptor, CheckOwnerCommentInterceptor];
     ...repositories,
     ...queryRepositories,
     ...interceptors,
-    QueryTransformPipe,
+    ...pipes,
   ],
-  exports: [...queryRepositories, MongooseModule, QueryTransformPipe],
+  exports: [...repositories, ...queryRepositories, ...pipes, MongooseModule],
 })
 export class PublicModule {}

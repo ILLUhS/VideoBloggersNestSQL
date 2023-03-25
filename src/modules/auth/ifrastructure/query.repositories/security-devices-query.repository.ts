@@ -5,7 +5,6 @@ import { DataSource } from 'typeorm';
 @Injectable()
 export class SecurityDevicesQueryRepository {
   constructor(@InjectDataSource() protected dataSource: DataSource) {}
-
   async findSessionsByUserId(userId: number) {
     const sessions = await this.dataSource.query(
       `SELECT

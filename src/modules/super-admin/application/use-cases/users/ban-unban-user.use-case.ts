@@ -5,11 +5,11 @@ import { User, UserModelType } from '../../../../../domain/schemas/user.schema';
 import { SaUsersService } from '../../services/sa-users.service';
 import { BadRequestException } from '@nestjs/common';
 import { SkipThrottle } from '@nestjs/throttler';
-import { SaPostsRepository } from '../../../infrastructure/repositories/sa-posts.repository';
 import { SaCommentsRepository } from '../../../infrastructure/repositories/sa-comments.repository';
 import { SaReactionsRepository } from '../../../infrastructure/repositories/sa-reactions.repository';
 import { UsersRepository } from '../../../../auth/ifrastructure/repositories/users.repository';
 import { RefreshTokenMetasRepository } from '../../../../auth/ifrastructure/repositories/refresh.token.metas.repository';
+import { PostsRepository } from '../../../../public/infrastructure/repositories/posts.repository';
 
 @SkipThrottle()
 @CommandHandler(BanUnbanUserCommand)
@@ -20,7 +20,7 @@ export class BanUnbanUserUseCase
     @InjectModel(User.name) private userModel: UserModelType,
     private usersService: SaUsersService,
     private usersRepository: UsersRepository,
-    private postsRepository: SaPostsRepository,
+    private postsRepository: PostsRepository,
     private commentsRepository: SaCommentsRepository,
     private reactionsRepository: SaReactionsRepository,
     private refreshTokenMetaRepository: RefreshTokenMetasRepository,

@@ -77,7 +77,7 @@ export class CommentsQueryRepository extends QueryMapHelpers {
       id: comment.id,
       content: comment.content,
       commentatorInfo: {
-        userId: comment.userId,
+        userId: String(comment.userId),
         userLogin: comment.userLogin,
       },
       createdAt: comment.createdAt,

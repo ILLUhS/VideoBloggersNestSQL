@@ -18,26 +18,29 @@ import { BanUserForBlogCommand } from '../../application/use-cases/users/command
 import RequestWithUser from '../../../../api/interfaces/request-with-user.interface';
 import { QueryTransformPipe } from '../../../public/api/pipes/query-transform.pipe';
 import { QueryParamsDto } from '../../../super-admin/api/dto/query-params.dto';
-import { BBlogsQueryRepository } from '../../infrastructure/query.repositories/b-blogs-query.repository';
 import { CheckOwnerBlogInterceptor } from './interceptors/check-owner-blog.interceptor';
 import { IntTransformPipe } from '../../../public/api/pipes/int-transform.pipe';
+import { BBannedUserForBlogQueryRepository } from '../../infrastructure/query.repositories/b-banned-user-for-blog-query.repository';
 
 @SkipThrottle()
 @Controller('blogger/users')
 export class BUsersController {
   constructor(
     private commandBus: CommandBus,
-    private blogsQueryRepository: BBlogsQueryRepository,
+    private bannedUserForBlogQueryRepository: BBannedUserForBlogQueryRepository,
   ) {}
 
   @UseGuards(BearerAuthGuard)
   @UseInterceptors(CheckOwnerBlogInterceptor)
   @Get('blog/:id')
   async findBannedUsersByBlog(
-    @Param('id') blogId: string,
+    @Param('id', new IntTransformPipe()) blogId: number,
     @Query(new QueryTransformPipe()) query: QueryParamsDto,
   ) {
-    return await this.blogsQueryRepository.getBanUsersByBlogId(query, blogId);
+    return await this.bannedUserForBlogQueryRepository.getBanUsersByBlogId(
+      query,
+      blogId,
+    );
   }
 
   @HttpCode(204)

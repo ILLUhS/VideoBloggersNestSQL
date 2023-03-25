@@ -5,6 +5,7 @@ import { PostCreateDto } from '../../modules/public/application/types/post.creat
 import { PostUpdateDto } from '../../modules/public/application/types/post.update.dto';
 import { Reaction, ReactionDocument } from './reaction.schema';
 import { FoundPostDtoType } from '../../modules/public/types/found-post-dto.type';
+import { PostCreateDtoType } from '../../modules/public/types/post-create-dto.type';
 
 export type PostDocument = HydratedDocument<Post>;
 
@@ -30,7 +31,7 @@ export type PostModelType = Model<PostDocument> &
   toObject: { virtuals: true },
 })
 export class Post {
-  constructor(private postDto: PostCreateDto) {
+  constructor(private postDto: PostCreateDtoType) {
     this.title = postDto.title;
     this.shortDescription = postDto.shortDescription;
     this.content = postDto.content;

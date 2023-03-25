@@ -4,10 +4,10 @@ import {
   ForbiddenException,
   Injectable,
   NestInterceptor,
-  NotFoundException
-} from "@nestjs/common";
-import { Observable } from "rxjs";
-import { CommentsService } from "../../../application/services/comments.service";
+  NotFoundException,
+} from '@nestjs/common';
+import { Observable } from 'rxjs';
+import { CommentsService } from '../../../application/services/comments.service';
 
 @Injectable()
 export class CheckOwnerCommentInterceptor implements NestInterceptor {
@@ -19,7 +19,7 @@ export class CheckOwnerCommentInterceptor implements NestInterceptor {
     const req = context.switchToHttp().getRequest();
     if (req.originalUrl.split('/')[1] === 'comments') {
       const commentUserId = await this.commentService.findComment(
-        req.params.id,
+        Number(req.params.id),
       );
       if (!commentUserId) throw new NotFoundException();
       if (req.user['userId'] !== commentUserId) throw new ForbiddenException();
