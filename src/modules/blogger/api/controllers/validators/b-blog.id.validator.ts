@@ -3,15 +3,15 @@ import {
   ValidatorConstraintInterface,
 } from 'class-validator';
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { BBlogsRepository } from '../../../infrastructure/repositories/b-blogs.repository';
+import { BBlogsService } from '../../../application/services/b-blogs.service';
 
 @ValidatorConstraint({ async: true })
 @Injectable()
 export class BBlogIdValidator implements ValidatorConstraintInterface {
-  constructor(private blogsService: BBlogsRepository) {}
+  constructor(private blogsService: BBlogsService) {}
 
   async validate(blogId: number): Promise<boolean> {
-    const blog = await this.blogsService.findById(blogId);
+    const blog = await this.blogsService.findBlogById(blogId);
     if (!blog)
       throw new BadRequestException({
         message: [

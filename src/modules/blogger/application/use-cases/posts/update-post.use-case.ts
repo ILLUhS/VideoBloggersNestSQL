@@ -1,14 +1,14 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { UpdatePostCommand } from './commands/update-post.command';
-import { BBlogsRepository } from '../../../infrastructure/repositories/b-blogs.repository';
-import { BPostsRepository } from '../../../infrastructure/repositories/b-posts.repository';
 import { NotFoundException } from '@nestjs/common';
+import { PostsRepository } from '../../../../public/infrastructure/repositories/posts.repository';
+import { BlogsRepository } from '../../../../public/infrastructure/repositories/blogs.repository';
 
 @CommandHandler(UpdatePostCommand)
 export class UpdatePostUseCase implements ICommandHandler<UpdatePostCommand> {
   constructor(
-    private blogsRepository: BBlogsRepository,
-    private postsRepository: BPostsRepository,
+    private blogsRepository: BlogsRepository,
+    private postsRepository: PostsRepository,
   ) {}
 
   async execute(command: UpdatePostCommand): Promise<boolean> {

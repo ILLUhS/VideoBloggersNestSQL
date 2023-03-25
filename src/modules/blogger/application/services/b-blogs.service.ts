@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { BBlogsRepository } from '../../infrastructure/repositories/b-blogs.repository';
 import { Blog } from '../../../../domain/schemas/blog.schema';
+import { BlogsRepository } from '../../../public/infrastructure/repositories/blogs.repository';
 
 @Injectable()
 export class BBlogsService {
-  constructor(private blogsRepository: BBlogsRepository) {}
+  constructor(private blogsRepository: BlogsRepository) {}
 
   async findBlogById(id: number): Promise<Blog | null> {
     return await this.blogsRepository.findById(id);

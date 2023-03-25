@@ -1,14 +1,14 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { CreateBlogCommand } from './commands/create-blog.command';
-import { BBlogsRepository } from '../../../infrastructure/repositories/b-blogs.repository';
 import { InjectModel } from '@nestjs/mongoose';
 import { Blog, BlogModelType } from '../../../../../domain/schemas/blog.schema';
+import { BlogsRepository } from '../../../../public/infrastructure/repositories/blogs.repository';
 
 @CommandHandler(CreateBlogCommand)
 export class CreateBlogUseCase implements ICommandHandler<CreateBlogCommand> {
   constructor(
     @InjectModel(Blog.name) private blogModel: BlogModelType,
-    private blogsRepository: BBlogsRepository,
+    private blogsRepository: BlogsRepository,
   ) {}
   async execute(command: CreateBlogCommand): Promise<number> {
     const { blogDto, userId } = command;

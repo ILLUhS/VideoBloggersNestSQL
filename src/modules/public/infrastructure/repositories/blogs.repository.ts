@@ -1,19 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import {
-  Blog,
-  BlogDocument,
-  BlogModelType,
-} from '../../../../domain/schemas/blog.schema';
+import { Blog } from '../../../../domain/schemas/blog.schema';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 
 @Injectable()
-export class BBlogsRepository {
-  constructor(
-    @InjectDataSource() protected dataSource: DataSource,
-    @InjectModel(Blog.name) private blogModel: BlogModelType,
-  ) {}
+export class BlogsRepository {
+  //объект с методами управления данными
+  constructor(@InjectDataSource() protected dataSource: DataSource) {}
   async create(blog: Blog): Promise<number> {
     const result = await this.dataSource.query(
       `INSERT INTO public."Blogs"(
@@ -129,22 +122,5 @@ export class BBlogsRepository {
     );
     if (!result.length) return false;
     return true;
-  }
-  /*async findById(id: string): Promise<BlogDocument | null> {
-    return this.blogModel.findOne({ id: id });
-  }*/
-  /*async findByUserId(userId: string): Promise<BlogDocument[] | null> {
-    return this.blogModel.find({ userId: userId }).exec();
-  }*/
-  /*async deleteById(id: string): Promise<boolean> {
-    return (
-      (await this.blogModel.deleteOne({ id: id }).exec()).deletedCount === 1
-    );
-  }*/
-  async deleteAll(): Promise<boolean> {
-    return (await this.blogModel.deleteMany().exec()).acknowledged;
-  }
-  async save(blog: BlogDocument): Promise<boolean> {
-    return !!(await blog.save());
   }
 }

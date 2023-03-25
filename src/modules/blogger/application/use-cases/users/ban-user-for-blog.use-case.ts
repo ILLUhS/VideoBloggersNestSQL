@@ -1,17 +1,17 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { BanUserForBlogCommand } from './commands/ban-user-for-blog.command';
-import { BBlogsRepository } from '../../../infrastructure/repositories/b-blogs.repository';
 import { BUsersRepository } from '../../../infrastructure/repositories/b-users.repository';
 import { ForbiddenException, NotFoundException } from '@nestjs/common';
-import { BannedUserForBlogRepository } from '../../../infrastructure/repositories/banned-user-for-blog.repository';
+import { BannedUserForBlogRepository } from '../../../../public/infrastructure/repositories/banned-user-for-blog.repository';
 import { BannedUserForBlog } from '../../../../../domain/schemas/banned-user-for-blog.schema';
+import { BlogsRepository } from '../../../../public/infrastructure/repositories/blogs.repository';
 
 @CommandHandler(BanUserForBlogCommand)
 export class BanUserForBlogUseCase
   implements ICommandHandler<BanUserForBlogCommand>
 {
   constructor(
-    private blogsRepository: BBlogsRepository,
+    private blogsRepository: BlogsRepository,
     private usersRepository: BUsersRepository,
     private bannedUserForBlogRepository: BannedUserForBlogRepository,
   ) {}

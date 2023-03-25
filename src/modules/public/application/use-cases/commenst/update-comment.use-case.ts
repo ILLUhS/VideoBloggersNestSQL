@@ -15,6 +15,6 @@ export class UpdateCommentUseCase
     const comment = await this.commentsRepository.findById(id);
     if (!comment) throw new NotFoundException();
     await comment.setContent(content);
-    return await this.commentsRepository.save(comment);
+    return await this.commentsRepository.update(comment);
   }
 }

@@ -1,9 +1,10 @@
-import { HydratedDocument, Model } from "mongoose";
-import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import { ReactionDocument } from "./reaction.schema";
-import { v4 as uuidv4 } from "uuid";
-import { CommentCreateDtoType } from "../../modules/public/application/types/comment.create.dto.type";
-import { PostDocument } from "./post.schema";
+import { HydratedDocument, Model } from 'mongoose';
+import { v4 as uuidv4 } from 'uuid';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { ReactionDocument } from './reaction.schema';
+import { CommentCreateDtoType } from '../../modules/public/application/types/comment.create.dto.type';
+import { PostDocument } from './post.schema';
+import { FoundCommentDtoType } from '../../modules/public/types/found-comment-dto.type';
 
 export type CommentDocument = HydratedDocument<Comment>;
 
@@ -26,14 +27,19 @@ export type CommentModelType = Model<CommentDocument> &
   toObject: { virtuals: true },
 })
 export class Comment {
+  constructor(commentDto: CommentCreateDtoType) {
+    this.content = commentDto.content;
+    this.postId = commentDto.postId;
+    this.userId = commentDto.userId;
+  }
   @Prop({ required: true })
-  id: string;
+  id: number;
 
   @Prop({ required: true })
   content: string;
 
   @Prop({ required: true })
-  userId: string;
+  userId: number;
 
   @Prop({ required: true })
   userLogin: string;
@@ -42,7 +48,7 @@ export class Comment {
   createdAt: string;
 
   @Prop({ required: true })
-  postId: string;
+  postId: number;
 
   @Prop({ required: true })
   isBanned: boolean;
@@ -59,19 +65,27 @@ export class Comment {
       id: uuidv4(),
       content: commentDto.content,
       userId: commentDto.userId,
-      userLogin: commentDto.userLogin,
+      //userLogin: commentDto.userLogin,
       postId: commentDto.postId,
       createdAt: new Date().toISOString(),
       isBanned: false,
     });
   }
 
-  setContent(content: string) {
+  async setContent(content: string) {
     this.content = content;
   }
 
   setBanStatus(isBanned: boolean) {
     this.isBanned = isBanned;
+  }
+
+  async setAll(commentDto: FoundCommentDtoType) {
+    this.id = commentDto.id;
+    this.content = commentDto.content;
+    this.postId = commentDto.postId;
+    this.userId = commentDto.userId;
+    this.createdAt = commentDto.createdAt;
   }
 }
 
