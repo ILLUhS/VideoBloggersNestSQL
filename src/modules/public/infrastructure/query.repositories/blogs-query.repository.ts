@@ -5,6 +5,7 @@ import { QueryParamsDto } from '../../../super-admin/api/dto/query-params.dto';
 import { BlogsViewType } from '../../types/blog.view.type';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
+import format = require('pg-format');
 
 @Injectable()
 export class BlogsQueryRepository {
@@ -12,31 +13,36 @@ export class BlogsQueryRepository {
     @InjectDataSource() protected dataSource: DataSource,
     @InjectModel(Blog.name) protected blogModel: BlogModelType,
   ) {}
-
   async getBlogsWithQueryParam(searchParams: QueryParamsDto) {
-    const blogs = await this.blogModel
-      .find({
-        name: { $regex: searchParams.searchNameTerm, $options: 'i' },
-      })
-      .where({ isBanned: false })
-      .skip((searchParams.pageNumber - 1) * searchParams.pageSize)
-      .limit(searchParams.pageSize)
-      .sort([[searchParams.sortBy, searchParams.sortDirection]])
-      .select({
-        _id: 0,
-        id: 1,
-        name: 1,
-        description: 1,
-        websiteUrl: 1,
-        createdAt: 1,
-        isMembership: 1,
-      })
-      .exec();
-    const blogsCount = await this.blogModel
-      .countDocuments()
-      .where('name')
-      .regex(new RegExp(searchParams.searchNameTerm, 'i'))
-      .exec();
+    const sql = format(
+      `SELECT
+                "id",
+                "name",
+                "description",
+                "websiteUrl",
+                "createdAt",
+                "isMembership"
+                FROM public."Blogs"
+                WHERE "isBanned" IS FALSE
+                AND "name" ~* %1$L 
+                ORDER BY %4$I %5$s
+                LIMIT %2$L OFFSET %3$L;`,
+      searchParams.searchNameTerm,
+      searchParams.pageSize,
+      (searchParams.pageNumber - 1) * searchParams.pageSize,
+      searchParams.sortBy,
+      searchParams.sortDirection,
+    );
+    const blogs = await this.dataSource.query(sql);
+    const sqlCount = format(
+      `SELECT
+                COUNT(*)
+                FROM public."Blogs"
+                WHERE "isBanned" IS FALSE
+                AND "name" ~* %1$L;`,
+      searchParams.searchNameTerm,
+    );
+    const blogsCount = Number((await this.dataSource.query(sqlCount))[0].count);
     return {
       pagesCount: Math.ceil(blogsCount / searchParams.pageSize),
       page: searchParams.pageNumber,
@@ -75,19 +81,51 @@ export class BlogsQueryRepository {
       isMembership: blog[0].isMembership,
     };
   }
-  /*async findBlogById(id: string): Promise<BlogsViewType | null> {
-    return await this.blogModel
-      .findOne({ id: id })
-      .where({ isBanned: false })
-      .select({
-        _id: 0,
-        id: 1,
-        name: 1,
-        description: 1,
-        websiteUrl: 1,
-        createdAt: 1,
-        isMembership: 1,
-      })
-      .exec();
-  }*/
+  async getBlogsByUserId(searchParams: QueryParamsDto, userId: number) {
+    const sql = format(
+      `SELECT
+                "id",
+                "name",
+                "description",
+                "websiteUrl",
+                "createdAt",
+                "isMembership"
+                FROM public."Blogs"
+                WHERE "userId" = %1$s
+                AND "name" ~* %2$L 
+                ORDER BY %5$I %6$s
+                LIMIT %3$L OFFSET %4$L;`,
+      userId,
+      searchParams.searchNameTerm,
+      searchParams.pageSize,
+      (searchParams.pageNumber - 1) * searchParams.pageSize,
+      searchParams.sortBy,
+      searchParams.sortDirection,
+    );
+    const blogs = await this.dataSource.query(sql);
+    const sqlCount = format(
+      `SELECT
+                COUNT(*)
+                FROM public."Blogs"
+                WHERE "userId" = %1$s
+                AND "name" ~* %2$L;`,
+      userId,
+      searchParams.searchNameTerm,
+    );
+    const blogsCount = Number((await this.dataSource.query(sqlCount))[0].count);
+    return {
+      pagesCount: Math.ceil(blogsCount / searchParams.pageSize),
+      page: searchParams.pageNumber,
+      pageSize: searchParams.pageSize,
+      totalCount: blogsCount,
+      items: blogs.map((blog) => ({
+        id: blog.id,
+        name: blog.name,
+        description: blog.description,
+        websiteUrl: blog.websiteUrl,
+        createdAt: blog.createdAt,
+        isMembership: blog.isMembership,
+      })),
+    };
+  }
 }

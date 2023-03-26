@@ -9,7 +9,6 @@ import { CreatePostUseCase } from './application/use-cases/posts/create-post.use
 import { UpdatePostUseCase } from './application/use-cases/posts/update-post.use-case';
 import { DeletePostUseCase } from './application/use-cases/posts/delete-post.use-case';
 import { BBlogsService } from './application/services/b-blogs.service';
-import { BBlogsQueryRepository } from './infrastructure/query.repositories/b-blogs-query.repository';
 import { BlogsPostsController } from './api/controllers/blogs-posts.controller';
 import { PublicModule } from '../public/public.module';
 import { PostIdValidator } from './api/controllers/validators/post-id.validator';
@@ -17,7 +16,6 @@ import { BUsersController } from './api/controllers/b-users.controller';
 import { BanUserForBlogUseCase } from './application/use-cases/users/ban-user-for-blog.use-case';
 import { BBlogIdValidator } from './api/controllers/validators/b-blog.id.validator';
 import { BCommentsQueryRepository } from './infrastructure/query.repositories/b-comments-query.repository';
-import { PostsQueryRepository } from '../public/infrastructure/query.repositories/posts-query.repository';
 import { BBannedUserForBlogQueryRepository } from './infrastructure/query.repositories/b-banned-user-for-blog-query.repository';
 import { BPostsService } from './application/services/b-posts.service';
 
@@ -31,15 +29,8 @@ const useCases = [
   BanUserForBlogUseCase,
 ];
 const services = [BBlogsService, BPostsService];
-/*const repositories = [
-  BlogsRepository,
-  PostsRepository,
-  UsersRepository,
-  BannedUserForBlogRepository,
-];*/
+const repositories = [];
 const queryRepositories = [
-  BBlogsQueryRepository,
-  PostsQueryRepository,
   BCommentsQueryRepository,
   BBannedUserForBlogQueryRepository,
 ];
@@ -51,7 +42,7 @@ const validators = [BBlogIdValidator, PostIdValidator];
   providers: [
     ...useCases,
     ...services,
-    /*...repositories,*/
+    ...repositories,
     ...queryRepositories,
     ...validators,
   ],

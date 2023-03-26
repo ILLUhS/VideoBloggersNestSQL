@@ -1,13 +1,14 @@
-import { IsUUID, Validate } from "class-validator";
-import { UserIdValidator } from "../validators/user-id.validator";
-import { BlogIdValidator } from "../validators/blog.id.validator";
+import { Validate } from 'class-validator';
+import { UserIdValidator } from '../validators/user-id.validator';
+import { BlogIdValidator } from '../validators/blog.id.validator';
+import { Transform, TransformFnParams } from 'class-transformer';
 
 export class BlogIdAndUserIdInputDto {
-  @IsUUID(4)
+  @Transform(({ value }: TransformFnParams) => Number(value))
   @Validate(BlogIdValidator)
-  id: string;
+  id: number;
 
-  @IsUUID(4)
+  @Transform(({ value }: TransformFnParams) => Number(value))
   @Validate(UserIdValidator)
-  userId: string;
+  userId: number;
 }

@@ -9,7 +9,7 @@ export class PostsRepository {
   constructor(@InjectDataSource() protected dataSource: DataSource) {}
   async create(post: Post): Promise<number> {
     const result = await this.dataSource.query(
-      `INSERT INTO public."Post"(
+      `INSERT INTO public."Posts"(
                 "title", 
                 "shortDescription", 
                 "content", 
@@ -28,7 +28,7 @@ export class PostsRepository {
   }
   async update(post: Post): Promise<boolean> {
     const result = await this.dataSource.query(
-      `UPDATE public."Post"
+      `UPDATE public."Posts"
                 SET 
                 "title"=$2, 
                 "shortDescription"=$3, 
@@ -56,7 +56,7 @@ export class PostsRepository {
                 "content", 
                 "blogId", 
                 "createdAt"
-                FROM public."Post"
+                FROM public."Posts"
                 WHERE "id" = $1;`,
       [id],
     );
@@ -79,7 +79,7 @@ export class PostsRepository {
                 "content", 
                 "blogId", 
                 "createdAt"
-                FROM public."Post"
+                FROM public."Posts"
                 WHERE "blogId" = $1;`,
       [blogId],
     );
@@ -99,7 +99,7 @@ export class PostsRepository {
   }
   async deleteById(id: number): Promise<boolean> {
     const result = await this.dataSource.query(
-      `DELETE FROM public."Post"
+      `DELETE FROM public."Posts"
               WHERE "id" = $1
               RETURNING "id";`,
       [id],

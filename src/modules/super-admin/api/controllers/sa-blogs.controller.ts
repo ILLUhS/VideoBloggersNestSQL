@@ -18,6 +18,7 @@ import { BasicAuthGuard } from '../../../auth/api/controllers/guards/basic-auth.
 import { SaBlogsQueryRepository } from '../../infrastructure/query.repositories/sa-blogs-query.repository';
 import { BanBlogInputDto } from '../dto/ban-blog-input-dto';
 import { BanUnbanBlogCommand } from '../../application/use-cases/blogs/commands/ban-unban-blog.command';
+import { IntTransformPipe } from '../../../public/api/pipes/int-transform.pipe';
 
 @SkipThrottle()
 @Controller('sa/blogs')
@@ -47,7 +48,7 @@ export class SaBlogsController {
   @HttpCode(204)
   @Put(':id/ban')
   async banUnbanBlog(
-    @Param('id') blogId: string,
+    @Param('id', new IntTransformPipe()) blogId: number,
     @Body() banBlogDto: BanBlogInputDto,
   ) {
     await this.commandBus.execute(

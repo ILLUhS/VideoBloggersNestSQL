@@ -19,7 +19,6 @@ import { SkipThrottle } from '@nestjs/throttler';
 import { QueryTransformPipe } from '../../../public/api/pipes/query-transform.pipe';
 import { QueryParamsDto } from '../../../super-admin/api/dto/query-params.dto';
 import RequestWithUser from '../../../../api/interfaces/request-with-user.interface';
-import { BBlogsQueryRepository } from '../../infrastructure/query.repositories/b-blogs-query.repository';
 import { BlogInputDto } from '../../../public/application/types/blog-input.dto';
 import { CommandBus } from '@nestjs/cqrs';
 import { CreateBlogCommand } from '../../application/use-cases/blogs/commands/create-blog.command';
@@ -37,13 +36,14 @@ import { DeletePostCommand } from '../../application/use-cases/posts/commands/de
 import { BCommentsQueryRepository } from '../../infrastructure/query.repositories/b-comments-query.repository';
 import { IntTransformPipe } from '../../../public/api/pipes/int-transform.pipe';
 import { PostsQueryRepository } from '../../../public/infrastructure/query.repositories/posts-query.repository';
+import { BlogsQueryRepository } from '../../../public/infrastructure/query.repositories/blogs-query.repository';
 
 @SkipThrottle()
 @Controller('blogger/blogs')
 export class BlogsPostsController {
   constructor(
     private commandBus: CommandBus,
-    private blogsQueryRepository: BBlogsQueryRepository,
+    private blogsQueryRepository: BlogsQueryRepository,
     private postsQueryRepository: PostsQueryRepository,
     private commentsQueryRepository: BCommentsQueryRepository,
   ) {}

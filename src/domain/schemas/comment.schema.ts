@@ -31,6 +31,7 @@ export class Comment {
     this.content = commentDto.content;
     this.postId = commentDto.postId;
     this.userId = commentDto.userId;
+    this.createdAt = new Date().toISOString();
   }
   @Prop({ required: true })
   id: number;
