@@ -8,7 +8,6 @@ export class LikeForComment {
     this.reaction = likeDto.reaction;
     this.createdAt = new Date();
   }
-  id: number;
   commentId: number;
   userId: number;
   reaction: string;

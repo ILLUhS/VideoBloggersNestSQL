@@ -45,7 +45,7 @@ export class BBannedUserForBlogQueryRepository {
                 WHERE "login" ~* %2$L) as u
                 ON u.id = b."userId"
                 WHERE "blogId" = %1$s
-                AND "isBanned" IS TRUE ;`,
+                AND "isBanned" IS TRUE;`,
       blogId,
       searchParams.searchLoginTerm,
     );

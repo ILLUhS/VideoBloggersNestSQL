@@ -1,18 +1,11 @@
-import { InjectModel } from '@nestjs/mongoose';
-import {
-  Comment,
-  CommentModelType,
-} from '../../../../domain/schemas/comment.schema';
+import { Comment } from '../../../../domain/schemas/comment.schema';
 import { Injectable } from '@nestjs/common';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 
 @Injectable()
 export class CommentsRepository {
-  constructor(
-    @InjectDataSource() protected dataSource: DataSource,
-    @InjectModel(Comment.name) protected commentModel: CommentModelType,
-  ) {}
+  constructor(@InjectDataSource() protected dataSource: DataSource) {}
   async create(comment: Comment): Promise<number> {
     const result = await this.dataSource.query(
       `INSERT INTO public."Comments"(
