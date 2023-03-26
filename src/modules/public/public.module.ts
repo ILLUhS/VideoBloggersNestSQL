@@ -26,15 +26,15 @@ import { Reaction, ReactionSchema } from '../../domain/schemas/reaction.schema';
 import { QueryTransformPipe } from './api/pipes/query-transform.pipe';
 import { LikeForCommentRepository } from './infrastructure/repositories/like-for-comment.repository';
 import { LikeForPostRepository } from './infrastructure/repositories/like-for-post.repository';
-import { CreateLikeDislikeForPostCommand } from './application/use-cases/reactions/commands/create-like-dislike-for-post.command';
 import { BannedUserForBlogRepository } from './infrastructure/repositories/banned-user-for-blog.repository';
 import { IntTransformPipe } from './api/pipes/int-transform.pipe';
+import { CreateLikeDislikeForPostUseCase } from './application/use-cases/reactions/create-like-dislike-for-post.use-case';
 
 const useCases = [
   CreateCommentUseCase,
   UpdateCommentUseCase,
   DeleteCommentUseCase,
-  CreateLikeDislikeForPostCommand,
+  CreateLikeDislikeForPostUseCase,
   CreateLikeDislikeForCommentUseCase,
 ];
 const services = [CommentsService];

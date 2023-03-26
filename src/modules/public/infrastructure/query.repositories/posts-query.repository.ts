@@ -4,10 +4,15 @@ import { Post, PostModelType } from '../../../../domain/schemas/post.schema';
 import { QueryParamsDto } from '../../../super-admin/api/dto/query-params.dto';
 import { FilterQueryType } from '../../types/filter.query.type';
 import { QueryMapHelpers } from '../query-map.helpers';
+import { InjectDataSource } from '@nestjs/typeorm';
+import { DataSource } from 'typeorm';
 
 @Injectable()
 export class PostsQueryRepository extends QueryMapHelpers {
-  constructor(@InjectModel(Post.name) protected postModel: PostModelType) {
+  constructor(
+    @InjectDataSource() protected dataSource: DataSource,
+    @InjectModel(Post.name) protected postModel: PostModelType,
+  ) {
     super();
   }
 
@@ -88,4 +93,59 @@ export class PostsQueryRepository extends QueryMapHelpers {
       },
     };
   }
+  /*async getBlogsWithOwnerInfo(id: number, userId = '') {
+    const sql = format(
+      `SELECT
+                p."id",
+                "title", 
+                "shortDescription", 
+                "content", 
+                "blogId", 
+                p."createdAt",
+                l."userId",
+                l."createdAt" as "likeDate",
+                "reaction",
+                "login"
+                FROM public."Posts" as p
+                JOIN public."Blogs" as b
+                ON p."blogId" = b."id"
+                LEFT JOIN (
+                SELECT "postId", 
+                "userId",
+                lp."createdAt",
+                "reaction",
+                "login"
+                FROM public."LikeForPost" as lp
+                JOIN public."Users"
+                ON "userId" = "id") as l
+                ON l."postId" = p."id"
+                WHERE b."isBanned" IS FALSE
+                AND p."id" = 1$s
+                ORDER BY l."createdAt" DESC;`,
+      id,
+    );
+    const blogs = await this.dataSource.query(sql);
+    return {
+      pagesCount: Math.ceil(blogsCount / searchParams.pageSize),
+      page: searchParams.pageNumber,
+      pageSize: searchParams.pageSize,
+      totalCount: Number(blogsCount),
+      items: blogs.map((blog) => ({
+        id: blog.id,
+        name: blog.name,
+        description: blog.description,
+        websiteUrl: blog.websiteUrl,
+        createdAt: blog.createdAt,
+        isMembership: blog.isMembership,
+        blogOwnerInfo: {
+          userId: blog.userId,
+          userLogin: blog.login,
+        },
+        banInfo: {
+          isBanned: blog.isBanned,
+          banDate: blog.banDate,
+        },
+      })),
+    };
+  }*/
 }

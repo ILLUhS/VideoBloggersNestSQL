@@ -1,6 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { Blog, BlogModelType } from '../../../../domain/schemas/blog.schema';
 import { QueryParamsDto } from '../../../super-admin/api/dto/query-params.dto';
 import { BlogsViewType } from '../../types/blog.view.type';
 import { InjectDataSource } from '@nestjs/typeorm';
@@ -9,10 +7,7 @@ import format = require('pg-format');
 
 @Injectable()
 export class BlogsQueryRepository {
-  constructor(
-    @InjectDataSource() protected dataSource: DataSource,
-    @InjectModel(Blog.name) protected blogModel: BlogModelType,
-  ) {}
+  constructor(@InjectDataSource() protected dataSource: DataSource) {}
   async getBlogsWithQueryParam(searchParams: QueryParamsDto) {
     const sql = format(
       `SELECT

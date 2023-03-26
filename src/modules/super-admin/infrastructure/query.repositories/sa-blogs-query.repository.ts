@@ -1,17 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { QueryParamsDto } from '../../api/dto/query-params.dto';
-import { InjectModel } from '@nestjs/mongoose';
-import { Blog, BlogModelType } from '../../../../domain/schemas/blog.schema';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 import format = require('pg-format');
 
 @Injectable()
 export class SaBlogsQueryRepository {
-  constructor(
-    @InjectDataSource() protected dataSource: DataSource,
-    @InjectModel(Blog.name) private blogModel: BlogModelType,
-  ) {}
+  constructor(@InjectDataSource() protected dataSource: DataSource) {}
   async getBlogsWithOwnerInfo(searchParams: QueryParamsDto) {
     const sql = format(
       `SELECT
