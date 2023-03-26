@@ -1,8 +1,8 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { BindBlogWithUserCommand } from './commands/bind-blog-with-user.command';
 import { BadRequestException } from '@nestjs/common';
-import { SaBlogsRepository } from '../../../infrastructure/repositories/sa-blogs.repository';
 import { UsersRepository } from '../../../../auth/ifrastructure/repositories/users.repository';
+import { BlogsRepository } from '../../../../public/infrastructure/repositories/blogs.repository';
 
 @CommandHandler(BindBlogWithUserCommand)
 export class BindBlogWithUserUseCase
@@ -10,7 +10,7 @@ export class BindBlogWithUserUseCase
 {
   constructor(
     private usersRepository: UsersRepository,
-    private blogsRepository: SaBlogsRepository,
+    private blogsRepository: BlogsRepository,
   ) {}
   async execute(command: BindBlogWithUserCommand): Promise<void> {
     const { blogId, userId } = command;
@@ -26,7 +26,7 @@ export class BindBlogWithUserUseCase
           { field: 'blogId', message: 'blog already bound to any user' },
         ],
       });
-    blog.setOwner(user.id, user.login);
-    await this.blogsRepository.save(blog);
+    blog.setOwner(user.id);
+    await this.blogsRepository.update(blog);
   }
 }

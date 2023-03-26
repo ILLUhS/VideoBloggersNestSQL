@@ -1,6 +1,6 @@
 export class BanUnbanBlogCommand {
   constructor(
-    public readonly blogId: string,
+    public readonly blogId: number,
     public readonly isBanned: boolean,
   ) {}
 }

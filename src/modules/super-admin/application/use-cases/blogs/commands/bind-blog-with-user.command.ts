@@ -1,3 +1,3 @@
 export class BindBlogWithUserCommand {
-  constructor(public readonly blogId: string, public readonly userId: string) {}
+  constructor(public readonly blogId: number, public readonly userId: number) {}
 }

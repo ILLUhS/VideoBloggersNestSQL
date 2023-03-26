@@ -98,9 +98,8 @@ export class Blog {
     this.websiteUrl = blogDto.websiteUrl;
   }
 
-  setOwner(userId: number, userLogin: string) {
+  setOwner(userId: number) {
     this.userId = userId;
-    this.userLogin = userLogin;
   }
 
   banUser(bannedUser: BannedUserDtoType) {

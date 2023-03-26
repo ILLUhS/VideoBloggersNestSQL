@@ -10,16 +10,12 @@ import { SaUsersController } from './api/controllers/sa-users.controller';
 import { SaUsersQueryRepository } from './infrastructure/query.repositories/sa-users-query.repository';
 import { CreateUserUseCase } from './application/use-cases/users/create-user.use-case';
 import { BanUnbanUserUseCase } from './application/use-cases/users/ban-unban-user.use-case';
-import { SaBlogsRepository } from './infrastructure/repositories/sa-blogs.repository';
 import { BlogIdValidator } from './api/validators/blog.id.validator';
 import { SaBlogsService } from './application/services/sa-blogs.service';
 import { AuthModule } from '../auth/auth.module';
-import { SaCommentsRepository } from './infrastructure/repositories/sa-comments.repository';
-import { SaReactionsRepository } from './infrastructure/repositories/sa-reactions.repository';
 import { PublicModule } from '../public/public.module';
 import { DeleteUserUseCase } from './application/use-cases/users/delete-user.use-case';
 import { BanUnbanBlogUseCase } from './application/use-cases/blogs/ban-unban-blog.use-case';
-import { RefreshTokenMetasRepository } from '../auth/ifrastructure/repositories/refresh.token.metas.repository';
 
 const useCases = [
   BindBlogWithUserUseCase,
@@ -29,12 +25,7 @@ const useCases = [
   BanUnbanBlogUseCase,
 ];
 const services = [SaUsersService, SaBlogsService];
-const repositories = [
-  SaBlogsRepository,
-  SaCommentsRepository,
-  SaReactionsRepository,
-  RefreshTokenMetasRepository,
-];
+const repositories = [];
 const queryRepositories = [SaBlogsQueryRepository, SaUsersQueryRepository];
 const validators = [UserIdValidator, BlogIdValidator];
 

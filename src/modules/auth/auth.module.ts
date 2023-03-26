@@ -108,7 +108,13 @@ const interceptors = [
     ...interceptors,
     ...guards,
   ],
-  exports: [BearerAuthGuard, BasicAuthGuard, UsersRepository, MongooseModule],
+  exports: [
+    BearerAuthGuard,
+    BasicAuthGuard,
+    UsersRepository,
+    RefreshTokenMetasRepository,
+    MongooseModule,
+  ],
 })
 export class AuthModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
