@@ -97,7 +97,7 @@ export class BlogsPostsController {
     };
     const postId = await this.commandBus.execute<
       CreatePostCommand,
-      Promise<string> //todo number
+      Promise<number>
     >(new CreatePostCommand(postCreateDto));
     return await this.postsQueryRepository.findPostById(postId);
   }

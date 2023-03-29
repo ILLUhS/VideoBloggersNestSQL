@@ -1,9 +1,9 @@
-import { Injectable } from "@nestjs/common";
-import { ReactionDocument } from "../../../domain/schemas/reaction.schema";
+import { Injectable } from '@nestjs/common';
+import { ReactionDtoType } from '../types/reaction-dto.type';
 
 @Injectable()
 export class QueryMapHelpers {
-  async likesInfoMap(reactions: ReactionDocument[], userId: string) {
+  async likesInfoMap(reactions: ReactionDtoType[], userId: number) {
     let myStatus = 'None';
     let likesCount = 0;
     let dislikesCount = 0;
@@ -20,7 +20,7 @@ export class QueryMapHelpers {
       myStatus: myStatus,
     };
   }
-  async newestLikesMap(reactions: ReactionDocument[]) {
+  async newestLikesMap(reactions: ReactionDtoType[]) {
     //фильтруем копию массива, оставляем только лайки, потом сортируем лайки по дате
     const newestLikes = reactions
       .filter((like) => like.reaction === 'Like')

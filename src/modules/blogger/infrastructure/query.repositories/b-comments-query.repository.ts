@@ -54,7 +54,7 @@ export class BCommentsQueryRepository extends QueryMapHelpers {
       totalCount: commentsCount,
       items: await Promise.all(
         comments.map(async (c) => {
-          const likesInfoMapped = await this.likesInfoMap(c.reactions, userId);
+          const likesInfoMapped = 1; /*await this.likesInfoMap(c.reactions, userId);*/
           return {
             id: c.id,
             content: c.content,

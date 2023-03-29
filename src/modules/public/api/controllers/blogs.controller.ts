@@ -47,9 +47,7 @@ export class BlogsController {
     if (!blog) throw new NotFoundException();
     return await this.postsQueryRepository.getPotsWithQueryParam(
       query,
-      {
-        blogId: id,
-      },
+      id,
       req.user.userId,
     );
   }

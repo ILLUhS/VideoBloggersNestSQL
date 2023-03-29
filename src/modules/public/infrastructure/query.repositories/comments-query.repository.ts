@@ -43,10 +43,10 @@ export class CommentsQueryRepository extends QueryMapHelpers {
       totalCount: commentsCount,
       items: await Promise.all(
         comments.map(async (comment) => {
-          const likesInfoMapped = await this.likesInfoMap(
+          const likesInfoMapped = 1; /*await this.likesInfoMap(
             comment.reactions,
             userId,
-          );
+          )*/
           return {
             id: comment.id,
             content: comment.content,
@@ -72,7 +72,11 @@ export class CommentsQueryRepository extends QueryMapHelpers {
       .select({ _id: 0, __v: 0 })
       .exec();
     if (!comment) return null;
-    const likesInfoMapped = await this.likesInfoMap(comment.reactions, userId);
+    const likesInfoMapped = {
+      likesCount: 0,
+      dislikesCount: 0,
+      myStatus: 'None',
+    }; /*await this.likesInfoMap(comment.reactions, userId);*/
     return {
       id: comment.id,
       content: comment.content,

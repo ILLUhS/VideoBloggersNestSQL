@@ -45,14 +45,17 @@ export class PostsController {
   ) {
     return await this.postsQueryRepository.getPotsWithQueryParam(
       query,
-      {},
+      null,
       req.user.userId,
     );
   }
 
   @UseInterceptors(AuthHeaderInterceptor)
   @Get(':id')
-  async findById(@Param('id') id: string, @Req() req: RequestWithUser) {
+  async findById(
+    @Param('id', new IntTransformPipe()) id: number,
+    @Req() req: RequestWithUser,
+  ) {
     const post = await this.postsQueryRepository.findPostById(
       id,
       req.user.userId,
@@ -64,7 +67,7 @@ export class PostsController {
   @UseInterceptors(AuthHeaderInterceptor)
   @Get(':id/comments')
   async findCommentsByPostId(
-    @Param('id') id: string,
+    @Param('id', new IntTransformPipe()) id: number,
     @Query(new QueryTransformPipe()) query: QueryParamsDto,
     @Req() req: RequestWithUser,
   ) {
