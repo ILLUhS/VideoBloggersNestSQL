@@ -29,6 +29,7 @@ import { LikeForPostRepository } from './infrastructure/repositories/like-for-po
 import { BannedUserForBlogRepository } from './infrastructure/repositories/banned-user-for-blog.repository';
 import { IntTransformPipe } from './api/pipes/int-transform.pipe';
 import { CreateLikeDislikeForPostUseCase } from './application/use-cases/reactions/create-like-dislike-for-post.use-case';
+import { QueryMapHelpers } from './infrastructure/query-map.helpers';
 
 const useCases = [
   CreateCommentUseCase,
@@ -46,6 +47,7 @@ const repositories = [
   LikeForCommentRepository,
   BannedUserForBlogRepository,
   ReactionsRepository,
+  QueryMapHelpers,
 ];
 const queryRepositories = [
   BlogsQueryRepository,

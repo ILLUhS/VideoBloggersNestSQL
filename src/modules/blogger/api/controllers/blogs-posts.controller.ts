@@ -54,7 +54,7 @@ export class BlogsPostsController {
     @Query(new QueryTransformPipe()) query: QueryParamsDto,
     @Req() req: RequestWithUser,
   ) {
-    return await this.blogsQueryRepository.getBlogsByUserId(
+    return await this.blogsQueryRepository.getBlogsWithQueryParam(
       query,
       req.user.userId,
     );

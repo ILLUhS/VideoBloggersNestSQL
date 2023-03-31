@@ -1,6 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { Post, PostModelType } from '../../../../domain/schemas/post.schema';
 import { QueryParamsDto } from '../../../super-admin/api/dto/query-params.dto';
 import { QueryMapHelpers } from '../query-map.helpers';
 import { InjectDataSource } from '@nestjs/typeorm';
@@ -8,13 +6,11 @@ import { DataSource } from 'typeorm';
 import format = require('pg-format');
 
 @Injectable()
-export class PostsQueryRepository extends QueryMapHelpers {
+export class PostsQueryRepository {
   constructor(
     @InjectDataSource() protected dataSource: DataSource,
-    @InjectModel(Post.name) protected postModel: PostModelType,
-  ) {
-    super();
-  }
+    protected queryMap: QueryMapHelpers,
+  ) {}
   async findPostById(id: number, userId: number = null) {
     const sql = format(
       `SELECT
@@ -55,8 +51,13 @@ export class PostsQueryRepository extends QueryMapHelpers {
     );
     const post = await this.dataSource.query(sql);
     if (!post.length) return null;
-    const likesInfoMapped = await this.likesInfoMap(post[0].reactions, userId);
-    const newestLikesMapped = await this.newestLikesMap([...post[0].reactions]);
+    const likesInfoMapped = await this.queryMap.likesInfoMap(
+      post[0].reactions,
+      userId,
+    );
+    const newestLikesMapped = await this.queryMap.newestLikesMap([
+      ...post[0].reactions,
+    ]);
     return {
       id: post.id,
       title: post.title,
@@ -75,8 +76,8 @@ export class PostsQueryRepository extends QueryMapHelpers {
   }
   async getPotsWithQueryParam(
     searchParams: QueryParamsDto,
-    blogId?: number, //установка дефолтного значения
-    userId: number = null,
+    blogId?: number,
+    userId: number = null, //установка дефолтного значения,
   ) {
     let condition = ``;
     if (blogId) condition = `WHERE "id" = ${blogId}`;
@@ -148,11 +149,11 @@ export class PostsQueryRepository extends QueryMapHelpers {
       totalCount: +postsCount,
       items: await Promise.all(
         posts.map(async (post) => {
-          const likesInfoMapped = await this.likesInfoMap(
+          const likesInfoMapped = await this.queryMap.likesInfoMap(
             post.reactions,
             userId,
           );
-          const newestLikesMapped = await this.newestLikesMap([
+          const newestLikesMapped = await this.queryMap.newestLikesMap([
             ...post.reactions,
           ]);
           return {

@@ -8,7 +8,12 @@ import format = require('pg-format');
 @Injectable()
 export class BlogsQueryRepository {
   constructor(@InjectDataSource() protected dataSource: DataSource) {}
-  async getBlogsWithQueryParam(searchParams: QueryParamsDto) {
+  async getBlogsWithQueryParam(
+    searchParams: QueryParamsDto,
+    userId: number = null,
+  ) {
+    let condition = `WHERE "isBanned" IS FALSE`;
+    if (userId) condition = `WHERE "userId" = ${userId}`;
     const sql = format(
       `SELECT
                 "id",
@@ -18,7 +23,7 @@ export class BlogsQueryRepository {
                 "createdAt",
                 "isMembership"
                 FROM public."Blogs"
-                WHERE "isBanned" IS FALSE
+                %6$s
                 AND "name" ~* %1$L 
                 ORDER BY %4$I %5$s
                 LIMIT %2$L OFFSET %3$L;`,
@@ -27,15 +32,17 @@ export class BlogsQueryRepository {
       (searchParams.pageNumber - 1) * searchParams.pageSize,
       searchParams.sortBy,
       searchParams.sortDirection,
+      condition,
     );
     const blogs = await this.dataSource.query(sql);
     const sqlCount = format(
       `SELECT
                 COUNT(*)
                 FROM public."Blogs"
-                WHERE "isBanned" IS FALSE
+                %2$s
                 AND "name" ~* %1$L;`,
       searchParams.searchNameTerm,
+      condition,
     );
     const blogsCount = Number((await this.dataSource.query(sqlCount))[0].count);
     return {
@@ -74,53 +81,6 @@ export class BlogsQueryRepository {
       websiteUrl: blog[0].websiteUrl,
       createdAt: blog[0].createdAt,
       isMembership: blog[0].isMembership,
-    };
-  }
-  async getBlogsByUserId(searchParams: QueryParamsDto, userId: number) {
-    const sql = format(
-      `SELECT
-                "id",
-                "name",
-                "description",
-                "websiteUrl",
-                "createdAt",
-                "isMembership"
-                FROM public."Blogs"
-                WHERE "userId" = %1$s
-                AND "name" ~* %2$L 
-                ORDER BY %5$I %6$s
-                LIMIT %3$L OFFSET %4$L;`,
-      userId,
-      searchParams.searchNameTerm,
-      searchParams.pageSize,
-      (searchParams.pageNumber - 1) * searchParams.pageSize,
-      searchParams.sortBy,
-      searchParams.sortDirection,
-    );
-    const blogs = await this.dataSource.query(sql);
-    const sqlCount = format(
-      `SELECT
-                COUNT(*)
-                FROM public."Blogs"
-                WHERE "userId" = %1$s
-                AND "name" ~* %2$L;`,
-      userId,
-      searchParams.searchNameTerm,
-    );
-    const blogsCount = Number((await this.dataSource.query(sqlCount))[0].count);
-    return {
-      pagesCount: Math.ceil(blogsCount / searchParams.pageSize),
-      page: searchParams.pageNumber,
-      pageSize: searchParams.pageSize,
-      totalCount: blogsCount,
-      items: blogs.map((blog) => ({
-        id: blog.id,
-        name: blog.name,
-        description: blog.description,
-        websiteUrl: blog.websiteUrl,
-        createdAt: blog.createdAt,
-        isMembership: blog.isMembership,
-      })),
     };
   }
 }
