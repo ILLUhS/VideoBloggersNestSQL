@@ -75,9 +75,7 @@ export class PostsController {
     if (!post) throw new NotFoundException();
     return await this.commentsQueryRepository.getCommentsWithQueryParam(
       query,
-      {
-        postId: id,
-      },
+      id,
       req.user.userId,
     );
   }
@@ -91,7 +89,7 @@ export class PostsController {
   ) {
     const commentId = await this.commandBus.execute<
       CreateCommentCommand,
-      Promise<string | null>
+      Promise<number>
     >(
       new CreateCommentCommand({
         content: commentDto.content,

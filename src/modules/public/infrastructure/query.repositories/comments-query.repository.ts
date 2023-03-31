@@ -1,59 +1,116 @@
 import { Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import {
-  Comment,
-  CommentModelType,
-} from '../../../../domain/schemas/comment.schema';
-import { CommentsViewType } from '../../types/comment.view.type';
 import { QueryParamsDto } from '../../../super-admin/api/dto/query-params.dto';
-import { FilterQueryType } from '../../types/filter.query.type';
 import { QueryMapHelpers } from '../query-map.helpers';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
+import format = require('pg-format');
 
 @Injectable()
 export class CommentsQueryRepository {
   constructor(
-    @InjectModel(Comment.name) private commentModel: CommentModelType,
     @InjectDataSource() protected dataSource: DataSource,
     protected queryMap: QueryMapHelpers,
   ) {}
   async getCommentsWithQueryParam(
     searchParams: QueryParamsDto,
-    filter: FilterQueryType = {},
-    userId = '',
+    postId: number,
+    userId: number = null,
   ) {
-    if (!filter) filter = {};
-    const comments = await this.commentModel
-      .find(filter)
-      .where({ isBanned: false })
-      .populate({ path: 'reactions', match: { isBanned: false } })
-      .skip((searchParams.pageNumber - 1) * searchParams.pageSize)
-      .limit(searchParams.pageSize)
-      .sort([[searchParams.sortBy, searchParams.sortDirection]])
-      .select({ _id: 0, __v: 0 })
-      .exec();
-    const commentsCount = await this.commentModel
-      .countDocuments(filter)
-      .where({ isBanned: false })
-      .exec();
+    const sql = format(
+      `SELECT
+                c."id",
+                c."content",
+                c."userId",
+                u."login",
+                c."createdAt",
+                JSONB_AGG
+                (
+                    JSON_BUILD_OBJECT
+                    (
+                     'reaction', l."reaction",
+                     'userId', l."id",
+                     'login', l."login",
+                     'createdAt', l."createdAt"
+                    )
+                ) AS "reactions"
+            FROM "Comments" as c
+            JOIN (
+                    SELECT
+                    "Blogs"."id",
+                    "Blogs"."isBanned",
+                    "Posts"."id" as "postId"
+                    FROM public."Blogs"
+                    JOIN "Users" ON "Blogs"."userId" = "Users"."id"
+                    AND "Users"."isBanned" IS FALSE
+                    JOIN "Posts" ON "Blogs"."id" = "Posts"."blogId") as b
+            ON c."postId" = b."postId"
+            JOIN (
+                    SELECT
+                    "Users"."id",
+                    "Users"."login"
+                    FROM "Users") as u ON c."userId" = u."id"
+            LEFT JOIN (
+                    SELECT
+                        "LikeForComment"."reaction",
+                        "LikeForComment"."commentId",
+                        "Users"."id",
+                        "Users"."login",
+                        "Users"."createdAt"
+                    FROM public."LikeForComment"
+                    JOIN "Users" ON "LikeForComment"."userId" = "Users"."id"
+                        AND "Users"."isBanned" IS FALSE) as l
+            ON l."commentId" = c."id"
+            WHERE b."isBanned" IS FALSE
+            AND c."postId" = %1$s
+            GROUP BY c."id",
+                c."content",
+                c."userId",
+                u."login",
+                c."createdAt"
+            ORDER BY %4$I %5$s
+            LIMIT %2$L OFFSET %3$L;`,
+      postId,
+      searchParams.pageSize,
+      (searchParams.pageNumber - 1) * searchParams.pageSize,
+      searchParams.sortBy,
+      searchParams.sortDirection,
+    );
+    const comments = await this.dataSource.query(sql);
+    const sqlCount = format(
+      `SELECT
+                COUNT(*)
+                FROM "Comments" as c
+                JOIN (
+                    SELECT
+                    "Blogs"."id",
+                    "Blogs"."isBanned",
+                    "Posts"."id" as "postId"
+                    FROM public."Blogs"
+                    JOIN "Users" ON "Blogs"."userId" = "Users"."id"
+                    AND "Users"."isBanned" IS FALSE
+                    JOIN "Posts" ON "Blogs"."id" = "Posts"."blogId") as b
+                ON c."postId" = b."postId"
+                WHERE b."isBanned" IS FALSE;`,
+    );
+    const commentsCount: number = (await this.dataSource.query(sqlCount))[0]
+      .count;
     return {
       pagesCount: Math.ceil(commentsCount / searchParams.pageSize),
       page: searchParams.pageNumber,
       pageSize: searchParams.pageSize,
-      totalCount: commentsCount,
+      totalCount: Number(commentsCount),
       items: await Promise.all(
         comments.map(async (comment) => {
-          const likesInfoMapped = 1; /*await this.likesInfoMap(
+          const likesInfoMapped = await this.queryMap.likesInfoMap(
             comment.reactions,
             userId,
-          )*/
+          );
           return {
-            id: comment.id,
+            id: String(comment.id),
             content: comment.content,
             commentatorInfo: {
-              userId: comment.userId,
-              userLogin: comment.userLogin,
+              userId: String(comment.userId),
+              userLogin: comment.login,
             },
             createdAt: comment.createdAt,
             likesInfo: likesInfoMapped,
@@ -62,30 +119,74 @@ export class CommentsQueryRepository {
       ),
     };
   }
-  async findCommentById(
-    id: string,
-    userId = '',
-  ): Promise<CommentsViewType | null> {
-    const comment = await this.commentModel
-      .findOne({ id: id })
-      .where({ isBanned: false })
-      .populate({ path: 'reactions', match: { isBanned: false } })
-      .select({ _id: 0, __v: 0 })
-      .exec();
-    if (!comment) return null;
-    const likesInfoMapped = {
-      likesCount: 0,
-      dislikesCount: 0,
-      myStatus: 'None',
-    }; /*await this.likesInfoMap(comment.reactions, userId);*/
+  async findCommentById(id: number, userId: number = null) {
+    const sql = format(
+      `SELECT
+                c."id",
+                c."content", 
+                c."userId", 
+                u."login", 
+                c."createdAt",
+                JSONB_AGG
+                (
+                    JSON_BUILD_OBJECT
+                    (
+                     'reaction', l."reaction",
+                     'userId', l."id",
+                     'login', l."login",
+                     'createdAt', l."createdAt"
+                    )
+                ) AS "reactions"
+            FROM "Comments" as c
+            JOIN (
+                    SELECT 
+                    "Blogs"."id",
+                    "Blogs"."isBanned",
+                    "Posts"."id" as "postId"
+                    FROM public."Blogs"
+                    JOIN "Users" ON "Blogs"."userId" = "Users"."id" 
+                    AND "Users"."isBanned" IS FALSE
+                    JOIN "Posts" ON "Blogs"."id" = "Posts"."blogId") as b
+            ON c."postId" = b."postId"
+            JOIN (
+                    SELECT 
+                    "Users"."id",
+                    "Users"."login"
+                    FROM "Users") as u ON c."userId" = u."id"
+            LEFT JOIN (
+                    SELECT 
+                        "LikeForComment"."reaction",
+                        "LikeForComment"."commentId",
+                        "Users"."id",
+                        "Users"."login",
+                        "Users"."createdAt"
+                    FROM public."LikeForComment"
+                    JOIN "Users" ON "LikeForComment"."userId" = "Users"."id" 
+                        AND "Users"."isBanned" IS FALSE) as l
+            ON l."commentId" = c."id"
+            WHERE b."isBanned" IS FALSE
+            AND c."id" = %1$s
+            GROUP BY c."id",
+                c."content", 
+                c."userId", 
+                u."login", 
+                c."createdAt";`,
+      id,
+    );
+    const comment = await this.dataSource.query(sql);
+    if (!comment.length) return null;
+    const likesInfoMapped = await this.queryMap.likesInfoMap(
+      comment[0].reactions,
+      userId,
+    );
     return {
-      id: String(comment.id),
-      content: comment.content,
+      id: String(comment[0].id),
+      content: comment[0].content,
       commentatorInfo: {
-        userId: String(comment.userId),
-        userLogin: comment.userLogin,
+        userId: String(comment[0].userId),
+        userLogin: comment[0].login,
       },
-      createdAt: comment.createdAt,
+      createdAt: comment[0].createdAt,
       likesInfo: likesInfoMapped,
     };
   }

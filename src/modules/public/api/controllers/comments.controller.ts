@@ -36,7 +36,10 @@ export class CommentsController {
 
   @UseInterceptors(AuthHeaderInterceptor)
   @Get(':id')
-  async findCommentById(@Param('id') id: string, @Req() req: RequestWithUser) {
+  async findCommentById(
+    @Param('id', new IntTransformPipe()) id: number,
+    @Req() req: RequestWithUser,
+  ) {
     const comment = await this.commentsQueryRepository.findCommentById(
       id,
       req.user.userId,

@@ -9,7 +9,7 @@ export class QueryMapHelpers {
     let dislikesCount = 0;
     if (reactions.length > 0) {
       reactions.forEach((r) => {
-        if (r.userId === userId) myStatus = r.reaction;
+        if (userId && r.userId === userId) myStatus = r.reaction;
         if (r.reaction === 'Like') likesCount++;
         else if (r.reaction === 'Dislike') dislikesCount++;
       });

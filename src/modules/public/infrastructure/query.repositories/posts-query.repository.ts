@@ -152,14 +152,14 @@ export class PostsQueryRepository {
                 COUNT(*)
                 FROM "Posts" as p
                 JOIN (
-                    SELECT
-                    "id",
-                    "isBanned" 
+                    SELECT 
+                    "Blogs"."id",
+                    "Blogs"."isBanned" 
                     FROM public."Blogs"
+                    JOIN "Users" ON "Blogs"."userId" = "Users"."id" 
+                    AND "Users"."isBanned" IS FALSE
                     %1$s) as b 
                 ON p."blogId" = b."id"
-                LEFT JOIN "LikeForPost" ON "LikeForPost"."postId" = p.id
-                INNER JOIN "Users" ON "LikeForPost"."userId" = "Users".id
                 WHERE b."isBanned" IS FALSE;`,
       condition,
     );
