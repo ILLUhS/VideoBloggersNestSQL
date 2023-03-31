@@ -90,7 +90,9 @@ export class CommentsQueryRepository {
                     AND "Users"."isBanned" IS FALSE
                     JOIN "Posts" ON "Blogs"."id" = "Posts"."blogId") as b
                 ON c."postId" = b."postId"
-                WHERE b."isBanned" IS FALSE;`,
+                WHERE b."isBanned" IS FALSE
+                AND c."postId" = %1$s;`,
+      postId,
     );
     const commentsCount: number = (await this.dataSource.query(sqlCount))[0]
       .count;
