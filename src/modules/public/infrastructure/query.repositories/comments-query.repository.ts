@@ -8,15 +8,16 @@ import { CommentsViewType } from '../../types/comment.view.type';
 import { QueryParamsDto } from '../../../super-admin/api/dto/query-params.dto';
 import { FilterQueryType } from '../../types/filter.query.type';
 import { QueryMapHelpers } from '../query-map.helpers';
+import { InjectDataSource } from '@nestjs/typeorm';
+import { DataSource } from 'typeorm';
 
 @Injectable()
-export class CommentsQueryRepository extends QueryMapHelpers {
+export class CommentsQueryRepository {
   constructor(
     @InjectModel(Comment.name) private commentModel: CommentModelType,
-  ) {
-    super();
-  }
-
+    @InjectDataSource() protected dataSource: DataSource,
+    protected queryMap: QueryMapHelpers,
+  ) {}
   async getCommentsWithQueryParam(
     searchParams: QueryParamsDto,
     filter: FilterQueryType = {},
@@ -78,7 +79,7 @@ export class CommentsQueryRepository extends QueryMapHelpers {
       myStatus: 'None',
     }; /*await this.likesInfoMap(comment.reactions, userId);*/
     return {
-      id: comment.id,
+      id: String(comment.id),
       content: comment.content,
       commentatorInfo: {
         userId: String(comment.userId),

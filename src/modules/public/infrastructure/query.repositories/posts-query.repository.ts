@@ -24,21 +24,32 @@ export class PostsQueryRepository {
                 (
                     JSON_BUILD_OBJECT
                     (
-                     'reaction', "LikeForPost"."reaction",
-                     'userId', "Users"."id",
-                     'login', "Users"."login",
-                     'createdAt', "Users"."createdAt"
+                     'reaction', l."reaction",
+                     'userId', l."id",
+                     'login', l."login",
+                     'createdAt', l."createdAt"
                     )
                 ) AS "reactions"
             FROM "Posts" as p
             JOIN (
                     SELECT 
-                    "id",
-                    "isBanned" 
-                    FROM public."Blogs") as b 
+                    "Blogs"."id",
+                    "Blogs"."isBanned" 
+                    FROM public."Blogs"
+                    JOIN "Users" ON "Blogs"."userId" = "Users"."id" 
+                    AND "Users"."isBanned" IS FALSE) as b
             ON p."blogId" = b."id"
-            LEFT JOIN "LikeForPost" ON "LikeForPost"."postId" = p."id"
-            LEFT JOIN "Users" ON "LikeForPost"."userId" = "Users"."id"
+            LEFT JOIN (
+                    SELECT 
+                        "LikeForPost"."reaction",
+                        "LikeForPost"."postId",
+                        "Users"."id",
+                        "Users"."login",
+                        "Users"."createdAt"
+                    FROM public."LikeForPost"
+                    JOIN "Users" ON "LikeForPost"."userId" = "Users"."id" 
+                        AND "Users"."isBanned" IS FALSE) as l
+            ON l."postId" = p."id"
             WHERE b."isBanned" IS FALSE
             AND p."id" = %1$s
             GROUP BY p."id",
@@ -80,7 +91,7 @@ export class PostsQueryRepository {
     userId: number = null, //установка дефолтного значения,
   ) {
     let condition = ``;
-    if (blogId) condition = `WHERE "id" = ${blogId}`;
+    if (blogId) condition = `WHERE "Blogs"."id" = ${blogId}`;
     const sql = format(
       `SELECT
                 p."id",
@@ -93,22 +104,33 @@ export class PostsQueryRepository {
                 (
                     JSON_BUILD_OBJECT
                     (
-                     'reaction', "LikeForPost"."reaction",
-                     'userId', "Users"."id",
-                     'login', "Users"."login",
-                     'createdAt', "Users"."createdAt"
+                     'reaction', l."reaction",
+                     'userId', l."id",
+                     'login', l."login",
+                     'createdAt', l."createdAt"
                     )
                 ) AS "reactions"
             FROM "Posts" as p
             JOIN (
                     SELECT 
-                    "id",
-                    "isBanned" 
+                    "Blogs"."id",
+                    "Blogs"."isBanned" 
                     FROM public."Blogs"
+                    JOIN "Users" ON "Blogs"."userId" = "Users"."id" 
+                    AND "Users"."isBanned" IS FALSE
                     %1$s) as b 
             ON p."blogId" = b."id"
-            LEFT JOIN "LikeForPost" ON "LikeForPost"."postId" = p.id
-            LEFT JOIN "Users" ON "LikeForPost"."userId" = "Users".id
+            LEFT JOIN (
+                    SELECT 
+                        "LikeForPost"."reaction",
+                        "LikeForPost"."postId",
+                        "Users"."id",
+                        "Users"."login",
+                        "Users"."createdAt"
+                    FROM public."LikeForPost"
+                    JOIN "Users" ON "LikeForPost"."userId" = "Users"."id" 
+                        AND "Users"."isBanned" IS FALSE) as l
+            ON l."postId" = p."id"
             WHERE b."isBanned" IS FALSE
             GROUP BY p."id",
                 "title", 
