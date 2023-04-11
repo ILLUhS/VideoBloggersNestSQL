@@ -27,7 +27,8 @@ export class BlogsQueryRepository {
                 ON "Users"."id" = "Blogs"."userId"
                 AND "Users"."isBanned" IS FALSE
                 %6$s
-                AND "name" ~* %1$L 
+                AND "name" ~* %1$L
+                AND "Blogs"."isBanned" IS FALSE 
                 ORDER BY "Blogs".%4$I %5$s
                 LIMIT %2$L OFFSET %3$L;`,
       searchParams.searchNameTerm,
@@ -76,7 +77,8 @@ export class BlogsQueryRepository {
                 JOIN "Users"
                 ON "Users"."id" = "Blogs"."userId"
                 AND "Users"."isBanned" IS FALSE
-                WHERE "Blogs"."id" = $1;`,
+                WHERE "Blogs"."id" = $1
+                AND "Blogs"."isBanned" IS FALSE;`,
       [id],
     );
     if (!blog.length) return null;

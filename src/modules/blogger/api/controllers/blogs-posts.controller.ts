@@ -110,6 +110,8 @@ export class BlogsPostsController {
     @Param('id', new IntTransformPipe()) id: number,
     @Body() blogDto: BlogUpdateDto,
   ) {
+    const foundBlog = await this.blogsQueryRepository.findBlogById(id);
+    if (!foundBlog) throw new NotFoundException();
     const result = await this.commandBus.execute<
       UpdateBlogCommand,
       Promise<boolean>
