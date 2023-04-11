@@ -20,6 +20,7 @@ export class PostsQueryRepository {
                 "content", 
                 "blogId", 
                 p."createdAt",
+                b."name" as "blogName",
                 JSONB_AGG
                 (
                     JSON_BUILD_OBJECT
@@ -34,7 +35,8 @@ export class PostsQueryRepository {
             JOIN (
                     SELECT 
                     "Blogs"."id",
-                    "Blogs"."isBanned" 
+                    "Blogs"."isBanned",
+                    "Blogs"."name"
                     FROM public."Blogs"
                     JOIN "Users" ON "Blogs"."userId" = "Users"."id" 
                     AND "Users"."isBanned" IS FALSE) as b
@@ -100,6 +102,7 @@ export class PostsQueryRepository {
                 "content", 
                 "blogId", 
                 p."createdAt",
+                b."name" as "blogName",
                 JSONB_AGG
                 (
                     JSON_BUILD_OBJECT
@@ -114,7 +117,8 @@ export class PostsQueryRepository {
             JOIN (
                     SELECT 
                     "Blogs"."id",
-                    "Blogs"."isBanned" 
+                    "Blogs"."isBanned",
+                    "Blogs"."name" 
                     FROM public."Blogs"
                     JOIN "Users" ON "Blogs"."userId" = "Users"."id" 
                     AND "Users"."isBanned" IS FALSE
