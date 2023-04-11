@@ -59,7 +59,8 @@ export class PostsQueryRepository {
                 "shortDescription", 
                 "content", 
                 "blogId", 
-                p."createdAt";`,
+                p."createdAt",
+                b."name";`,
       id,
     );
     const post = await this.dataSource.query(sql);
@@ -72,13 +73,13 @@ export class PostsQueryRepository {
       ...post[0].reactions,
     ]);
     return {
-      id: String(post.id),
-      title: post.title,
-      shortDescription: post.shortDescription,
-      content: post.content,
-      blogId: String(post.blogId),
-      blogName: post.blogName,
-      createdAt: post.createdAt,
+      id: String(post[0].id),
+      title: post[0].title,
+      shortDescription: post[0].shortDescription,
+      content: post[0].content,
+      blogId: String(post[0].blogId),
+      blogName: post[0].blogName,
+      createdAt: post[0].createdAt,
       extendedLikesInfo: {
         likesCount: likesInfoMapped.likesCount,
         dislikesCount: likesInfoMapped.dislikesCount,
@@ -141,7 +142,8 @@ export class PostsQueryRepository {
                 "shortDescription", 
                 "content", 
                 "blogId", 
-                p."createdAt"
+                p."createdAt",
+                b."name"
             ORDER BY %4$I %5$s
             LIMIT %2$L OFFSET %3$L;`,
       condition,
