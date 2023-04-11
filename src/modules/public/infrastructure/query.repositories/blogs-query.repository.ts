@@ -23,6 +23,9 @@ export class BlogsQueryRepository {
                 "createdAt",
                 "isMembership"
                 FROM public."Blogs"
+                JOIN "Users"
+                ON "Users"."id" = "Blogs"."userId"
+                AND "Users"."isBanned" IS FALSE
                 %6$s
                 AND "name" ~* %1$L 
                 ORDER BY %4$I %5$s
@@ -70,6 +73,9 @@ export class BlogsQueryRepository {
                 "createdAt",
                 "isMembership"
                 FROM public."Blogs"
+                JOIN "Users"
+                ON "Users"."id" = "Blogs"."userId"
+                AND "Users"."isBanned" IS FALSE
                 WHERE "id" = $1;`,
       [id],
     );
