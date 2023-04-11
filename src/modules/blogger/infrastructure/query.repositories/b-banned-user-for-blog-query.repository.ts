@@ -8,6 +8,7 @@ import format = require('pg-format');
 export class BBannedUserForBlogQueryRepository {
   constructor(@InjectDataSource() protected dataSource: DataSource) {}
   async getBanUsersByBlogId(searchParams: QueryParamsDto, blogId: number) {
+    if (searchParams.sortBy === 'createdAt') searchParams.sortBy = 'banDate';
     const sql = format(
       `SELECT
                 b."id",
