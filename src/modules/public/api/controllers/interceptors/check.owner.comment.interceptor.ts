@@ -18,9 +18,10 @@ export class CheckOwnerCommentInterceptor implements NestInterceptor {
   ): Promise<Observable<any>> {
     const req = context.switchToHttp().getRequest();
     if (req.originalUrl.split('/')[1] === 'comments') {
-      const commentUserId = await this.commentService.findComment(
-        Number(req.params.id),
-      );
+      const result = Number(req.params.id);
+      if (isNaN(result) || result > 2147483647 || result < -2147483648)
+        throw new NotFoundException();
+      const commentUserId = await this.commentService.findComment(result);
       if (!commentUserId) throw new NotFoundException();
       if (req.user['userId'] !== commentUserId) throw new ForbiddenException();
     }
