@@ -12,7 +12,7 @@ export class BlogsQueryRepository {
     searchParams: QueryParamsDto,
     userId: number = null,
   ) {
-    let condition = `WHERE "isBanned" IS FALSE`;
+    let condition = `WHERE "Blogs"."isBanned" IS FALSE`;
     if (userId) condition = `WHERE "userId" = ${userId}`;
     const sql = format(
       `SELECT
@@ -28,7 +28,7 @@ export class BlogsQueryRepository {
                 AND "Users"."isBanned" IS FALSE
                 %6$s
                 AND "name" ~* %1$L 
-                ORDER BY %4$I %5$s
+                ORDER BY "Blogs".%4$I %5$s
                 LIMIT %2$L OFFSET %3$L;`,
       searchParams.searchNameTerm,
       searchParams.pageSize,
@@ -76,7 +76,7 @@ export class BlogsQueryRepository {
                 JOIN "Users"
                 ON "Users"."id" = "Blogs"."userId"
                 AND "Users"."isBanned" IS FALSE
-                WHERE "id" = $1;`,
+                WHERE "Blogs"."id" = $1;`,
       [id],
     );
     if (!blog.length) return null;
