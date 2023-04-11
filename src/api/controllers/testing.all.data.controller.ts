@@ -5,7 +5,17 @@ import { SkipThrottle } from '@nestjs/throttler';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 
-const tables = ['PasswordRecovery', 'RefreshTokenMetas', 'Users'];
+const tables = [
+  'BannedUsersForBlog',
+  'LikeForComment',
+  'LikeForPost',
+  'Comments',
+  'Posts',
+  'Blogs',
+  'PasswordRecovery',
+  'RefreshTokenMetas',
+  'Users',
+];
 @SkipThrottle()
 @Controller('testing/all-data')
 export class TestingAllDataController {
