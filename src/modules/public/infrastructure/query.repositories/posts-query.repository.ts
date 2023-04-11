@@ -70,11 +70,11 @@ export class PostsQueryRepository {
       ...post[0].reactions,
     ]);
     return {
-      id: post.id,
+      id: String(post.id),
       title: post.title,
       shortDescription: post.shortDescription,
       content: post.content,
-      blogId: post.blogId,
+      blogId: String(post.blogId),
       blogName: post.blogName,
       createdAt: post.createdAt,
       extendedLikesInfo: {

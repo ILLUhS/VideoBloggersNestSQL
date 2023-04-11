@@ -51,7 +51,7 @@ export class BlogsQueryRepository {
       pageSize: searchParams.pageSize,
       totalCount: blogsCount,
       items: blogs.map((blog) => ({
-        id: blog.id,
+        id: String(blog.id),
         name: blog.name,
         description: blog.description,
         websiteUrl: blog.websiteUrl,

@@ -53,14 +53,14 @@ export class SaBlogsQueryRepository {
       pageSize: searchParams.pageSize,
       totalCount: Number(blogsCount),
       items: blogs.map((blog) => ({
-        id: blog.id,
+        id: String(blog.id),
         name: blog.name,
         description: blog.description,
         websiteUrl: blog.websiteUrl,
         createdAt: blog.createdAt,
         isMembership: blog.isMembership,
         blogOwnerInfo: {
-          userId: blog.userId,
+          userId: String(blog.userId),
           userLogin: blog.login,
         },
         banInfo: {

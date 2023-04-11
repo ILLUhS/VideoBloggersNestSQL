@@ -56,7 +56,7 @@ export class BBannedUserForBlogQueryRepository {
       pageSize: searchParams.pageSize,
       totalCount: Number(usersCount),
       items: users.map((u) => ({
-        id: u.id,
+        id: String(u.id),
         login: u.login,
         banInfo: {
           isBanned: u.isBanned,
