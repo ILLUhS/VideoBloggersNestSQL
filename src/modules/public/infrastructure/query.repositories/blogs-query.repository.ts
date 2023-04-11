@@ -16,11 +16,11 @@ export class BlogsQueryRepository {
     if (userId) condition = `WHERE "userId" = ${userId}`;
     const sql = format(
       `SELECT
-                "id",
+                "Blogs"."id",
                 "name",
                 "description",
                 "websiteUrl",
-                "createdAt",
+                "Blogs"."createdAt",
                 "isMembership"
                 FROM public."Blogs"
                 JOIN "Users"
@@ -66,11 +66,11 @@ export class BlogsQueryRepository {
   async findBlogById(id: number): Promise<BlogsViewType | null> {
     const blog = await this.dataSource.query(
       `SELECT
-                "id",
+                "Blogs"."id",
                 "name",
                 "description",
                 "websiteUrl",
-                "createdAt",
+                "Blogs"."createdAt",
                 "isMembership"
                 FROM public."Blogs"
                 JOIN "Users"
