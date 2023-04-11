@@ -35,7 +35,7 @@ export class QueryMapHelpers {
       });
     newestLikes.splice(3); //берем первые три лайка
     return newestLikes.map((like) => ({
-      addedAt: like.createdAt,
+      addedAt: String(like.createdAt),
       userId: String(like.userId),
       login: like.login,
     }));
