@@ -10,24 +10,14 @@ import { BasicStrategy } from './api/controllers/guards/strategies/basic.strateg
 import { LocalStrategy } from './api/controllers/guards/strategies/local.strategy';
 import { AuthService } from './application/services/auth.service';
 import { AuthController } from './api/controllers/auth.controller';
-import { MongooseModule } from '@nestjs/mongoose';
-import { User, UserSchema } from '../../domain/schemas/user.schema';
 import { JwtService } from '@nestjs/jwt';
 import { JwtStrategy } from './api/controllers/guards/strategies/jwt.strategy';
-import {
-  RefreshTokenMeta,
-  RefreshTokenMetaSchema,
-} from '../../domain/schemas/refresh-token-meta.schema';
 import { RefreshTokenMetasRepository } from './ifrastructure/repositories/refresh.token.metas.repository';
 import { LoginMiddleware } from './api/controllers/middlewares/login.middleware';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { getMailConfig } from './application/configs/email.config';
 import { RefreshStrategy } from './api/controllers/guards/strategies/refresh.strategy';
 import { PasswordRecoveriesRepository } from './ifrastructure/repositories/password-recoveries.repository';
-import {
-  PasswordRecovery,
-  PasswordRecoverySchema,
-} from '../../domain/schemas/password-recovery.schema';
 import { SecurityDevicesController } from './api/controllers/security-devices.controller';
 import { AuthQueryRepository } from './ifrastructure/query.repositories/auth-query.repository';
 import { CheckOwnerDeviceInterceptor } from './api/controllers/interceptors/check.owner.device.interceptor';
@@ -87,11 +77,6 @@ const interceptors = [
     CqrsModule,
     PassportModule,
     ConfigModule,
-    MongooseModule.forFeature([
-      { name: User.name, schema: UserSchema },
-      { name: RefreshTokenMeta.name, schema: RefreshTokenMetaSchema },
-      { name: PasswordRecovery.name, schema: PasswordRecoverySchema },
-    ]),
     MailerModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -113,7 +98,6 @@ const interceptors = [
     BasicAuthGuard,
     UsersRepository,
     RefreshTokenMetasRepository,
-    MongooseModule,
   ],
 })
 export class AuthModule implements NestModule {

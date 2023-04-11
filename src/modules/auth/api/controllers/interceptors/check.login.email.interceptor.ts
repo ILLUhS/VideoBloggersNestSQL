@@ -1,6 +1,12 @@
-import { BadRequestException, CallHandler, ExecutionContext, Injectable, NestInterceptor } from "@nestjs/common";
-import { Observable } from "rxjs";
-import { AuthService } from "../../../application/services/auth.service";
+import {
+  BadRequestException,
+  CallHandler,
+  ExecutionContext,
+  Injectable,
+  NestInterceptor,
+} from '@nestjs/common';
+import { Observable } from 'rxjs';
+import { AuthService } from '../../../application/services/auth.service';
 
 @Injectable()
 export class CheckLoginEmailInterceptor implements NestInterceptor {

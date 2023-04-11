@@ -1,7 +1,5 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { BanUnbanUserCommand } from './commands/ban-unban-user.command';
-import { InjectModel } from '@nestjs/mongoose';
-import { User, UserModelType } from '../../../../../domain/schemas/user.schema';
 import { SaUsersService } from '../../services/sa-users.service';
 import { BadRequestException } from '@nestjs/common';
 import { SkipThrottle } from '@nestjs/throttler';
@@ -14,7 +12,6 @@ export class BanUnbanUserUseCase
   implements ICommandHandler<BanUnbanUserCommand>
 {
   constructor(
-    @InjectModel(User.name) private userModel: UserModelType,
     private usersService: SaUsersService,
     private usersRepository: UsersRepository,
     private refreshTokenMetaRepository: RefreshTokenMetasRepository,

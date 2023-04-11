@@ -1,4 +1,4 @@
-import { EjsAdapter } from "@nestjs-modules/mailer/dist/adapters/ejs.adapter";
+import { EjsAdapter } from '@nestjs-modules/mailer/dist/adapters/ejs.adapter';
 
 export const getMailConfig = async (): Promise<any> => {
   const transport = process.env.EMAIL_TRANSPORT;

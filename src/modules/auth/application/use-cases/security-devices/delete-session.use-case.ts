@@ -1,6 +1,6 @@
-import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
-import { DeleteSessionCommand } from "./commands/delete-session.command";
-import { SecurityDevicesService } from "../../services/security-devices.service";
+import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
+import { DeleteSessionCommand } from './commands/delete-session.command';
+import { SecurityDevicesService } from '../../services/security-devices.service';
 
 @CommandHandler(DeleteSessionCommand)
 export class DeleteSessionUseCase

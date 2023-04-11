@@ -13,16 +13,10 @@ import { CommentsQueryRepository } from './infrastructure/query.repositories/com
 import { BlogsRepository } from './infrastructure/repositories/blogs.repository';
 import { PostsRepository } from './infrastructure/repositories/posts.repository';
 import { CommentsRepository } from './infrastructure/repositories/comments.repository';
-import { ReactionsRepository } from './infrastructure/repositories/reactions.repository';
 import { AuthHeaderInterceptor } from './api/controllers/interceptors/auth.header.interceptor';
 import { CheckOwnerCommentInterceptor } from './api/controllers/interceptors/check.owner.comment.interceptor';
 import { AuthModule } from '../auth/auth.module';
 import { CqrsModule } from '@nestjs/cqrs';
-import { MongooseModule } from '@nestjs/mongoose';
-import { Blog, BlogSchema } from '../../domain/schemas/blog.schema';
-import { Post, PostSchema } from '../../domain/schemas/post.schema';
-import { Comment, CommentSchema } from '../../domain/schemas/comment.schema';
-import { Reaction, ReactionSchema } from '../../domain/schemas/reaction.schema';
 import { QueryTransformPipe } from './api/pipes/query-transform.pipe';
 import { LikeForCommentRepository } from './infrastructure/repositories/like-for-comment.repository';
 import { LikeForPostRepository } from './infrastructure/repositories/like-for-post.repository';
@@ -46,28 +40,18 @@ const repositories = [
   LikeForPostRepository,
   LikeForCommentRepository,
   BannedUserForBlogRepository,
-  ReactionsRepository,
-  QueryMapHelpers,
 ];
 const queryRepositories = [
   BlogsQueryRepository,
   PostsQueryRepository,
   CommentsQueryRepository,
+  QueryMapHelpers,
 ];
 const interceptors = [AuthHeaderInterceptor, CheckOwnerCommentInterceptor];
 
 const pipes = [QueryTransformPipe, IntTransformPipe];
 @Module({
-  imports: [
-    AuthModule,
-    CqrsModule,
-    MongooseModule.forFeature([
-      { name: Blog.name, schema: BlogSchema },
-      { name: Post.name, schema: PostSchema },
-      { name: Comment.name, schema: CommentSchema },
-      { name: Reaction.name, schema: ReactionSchema },
-    ]),
-  ],
+  imports: [AuthModule, CqrsModule],
   controllers: [BlogsController, PostsController, CommentsController],
   providers: [
     ...useCases,
@@ -77,6 +61,6 @@ const pipes = [QueryTransformPipe, IntTransformPipe];
     ...interceptors,
     ...pipes,
   ],
-  exports: [...repositories, ...queryRepositories, ...pipes, MongooseModule],
+  exports: [...repositories, ...queryRepositories, ...pipes],
 })
 export class PublicModule {}

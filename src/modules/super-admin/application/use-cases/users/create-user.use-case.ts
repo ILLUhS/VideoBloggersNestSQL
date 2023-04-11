@@ -1,16 +1,12 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { InjectModel } from '@nestjs/mongoose';
-import { User, UserModelType } from '../../../../../domain/schemas/user.schema';
+import { User } from '../../../../../domain/schemas/user.schema';
 import { CreateUserCommand } from './commands/create-user.command';
 import * as bcrypt from 'bcrypt';
 import { UsersRepository } from '../../../../auth/ifrastructure/repositories/users.repository';
 
 @CommandHandler(CreateUserCommand)
 export class CreateUserUseCase implements ICommandHandler<CreateUserCommand> {
-  constructor(
-    @InjectModel(User.name) private userModel: UserModelType,
-    protected usersRepository: UsersRepository,
-  ) {}
+  constructor(protected usersRepository: UsersRepository) {}
   async execute(command: CreateUserCommand): Promise<number> {
     const { login, email, password } = command.userDto;
     const passwordSalt = await bcrypt.genSalt(10);

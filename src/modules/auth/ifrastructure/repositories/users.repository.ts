@@ -1,19 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import {
-  User,
-  UserDocument,
-  UserModelType,
-} from '../../../../domain/schemas/user.schema';
+import { User } from '../../../../domain/schemas/user.schema';
 import { DataSource } from 'typeorm';
 import { InjectDataSource } from '@nestjs/typeorm';
 
 @Injectable()
 export class UsersRepository {
-  constructor(
-    @InjectDataSource() protected dataSource: DataSource,
-    @InjectModel(User.name) protected userModel: UserModelType,
-  ) {}
+  constructor(@InjectDataSource() protected dataSource: DataSource) {}
   async create(user: User): Promise<number> {
     const result = await this.dataSource.query(
       `INSERT INTO public."Users"(
@@ -106,8 +98,5 @@ export class UsersRepository {
     );
     if (!result.length) return false;
     return true;
-  }
-  async findById(id: any): Promise<UserDocument | null> {
-    return this.userModel.findOne({ id: id });
   }
 }

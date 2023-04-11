@@ -14,7 +14,7 @@ export class BindBlogWithUserUseCase
   ) {}
   async execute(command: BindBlogWithUserCommand): Promise<void> {
     const { blogId, userId } = command;
-    const user = await this.usersRepository.findById(userId);
+    const user = await this.usersRepository.findOneByField('id', userId);
     const blog = await this.blogsRepository.findById(blogId);
     if (!user || !blog)
       throw new BadRequestException({
