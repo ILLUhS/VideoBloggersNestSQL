@@ -34,15 +34,6 @@ export class QueryMapHelpers {
         return 0;
       });
     newestLikes.splice(3); //берем первые три лайка
-    newestLikes.sort(function (a, b) {
-      if (a.createdAt > b.createdAt) {
-        return 1;
-      }
-      if (a.createdAt < b.createdAt) {
-        return -1;
-      }
-      return 0;
-    });
     return newestLikes.map((like) => ({
       addedAt: like.createdAt,
       userId: String(like.userId),
