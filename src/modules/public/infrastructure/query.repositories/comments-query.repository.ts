@@ -47,7 +47,8 @@ export class CommentsQueryRepository {
             JOIN (
                     SELECT
                     "Users"."id",
-                    "Users"."login"
+                    "Users"."login",
+                    "Users"."isBanned"
                     FROM "Users") as u ON c."userId" = u."id"
                     AND u."isBanned" IS FALSE
             LEFT JOIN (
@@ -154,7 +155,8 @@ export class CommentsQueryRepository {
             JOIN (
                     SELECT 
                     "Users"."id",
-                    "Users"."login"
+                    "Users"."login",
+                    "Users"."isBanned"
                     FROM "Users") as u ON c."userId" = u."id"
                     AND u."isBanned" IS FALSE
             LEFT JOIN (
