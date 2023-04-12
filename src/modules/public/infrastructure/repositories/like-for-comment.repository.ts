@@ -7,7 +7,6 @@ import { LikeForComment } from '../../../../domain/schemas/like-for-comment.sche
 export class LikeForCommentRepository {
   constructor(@InjectDataSource() protected dataSource: DataSource) {}
   async create(like: LikeForComment): Promise<void> {
-    setTimeout(() => '', 500);
     await this.dataSource.query(
       `INSERT INTO public."LikeForComment"(
                 "commentId", 

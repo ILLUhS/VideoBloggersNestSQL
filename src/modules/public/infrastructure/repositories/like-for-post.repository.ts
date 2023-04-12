@@ -7,7 +7,6 @@ import { LikeForPost } from '../../../../domain/schemas/like-for-post.schema';
 export class LikeForPostRepository {
   constructor(@InjectDataSource() protected dataSource: DataSource) {}
   async create(like: LikeForPost): Promise<void> {
-    setTimeout(() => '', 500);
     await this.dataSource.query(
       `INSERT INTO public."LikeForPost"(
                 "postId", 
