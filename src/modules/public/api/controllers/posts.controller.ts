@@ -109,7 +109,6 @@ export class PostsController {
     @Body() likeStatusInputDto: LikeStatusInputDto,
     @Req() req: RequestWithUser,
   ) {
-    setTimeout(() => '', 1000);
     return await this.commandBus.execute(
       new CreateLikeDislikeForPostCommand({
         userId: req.user.userId,
