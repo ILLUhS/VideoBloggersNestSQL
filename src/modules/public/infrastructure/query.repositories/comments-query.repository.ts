@@ -49,6 +49,7 @@ export class CommentsQueryRepository {
                     "Users"."id",
                     "Users"."login"
                     FROM "Users") as u ON c."userId" = u."id"
+                    AND u."isBanned" IS FALSE
             LEFT JOIN (
                     SELECT
                         "LikeForComment"."reaction",
@@ -155,6 +156,7 @@ export class CommentsQueryRepository {
                     "Users"."id",
                     "Users"."login"
                     FROM "Users") as u ON c."userId" = u."id"
+                    AND u."isBanned" IS FALSE
             LEFT JOIN (
                     SELECT 
                         "LikeForComment"."reaction",
