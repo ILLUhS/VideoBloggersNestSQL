@@ -17,7 +17,7 @@ export class BBannedUserForBlogQueryRepository {
                 b."isBanned",
                 b."banDate",
                 b."banReason",
-                "login"
+                "login" COLLATE "POSIX"
                 FROM public."BannedUsersForBlog" as b
                 INNER JOIN (
                 SELECT "id", "login"
