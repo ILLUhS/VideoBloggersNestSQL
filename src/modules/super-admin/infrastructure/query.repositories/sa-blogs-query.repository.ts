@@ -11,7 +11,7 @@ export class SaBlogsQueryRepository {
     const sql = format(
       `SELECT
                 b."id",
-                "name", 
+                "name" COLLATE "POSIX", 
                 "description", 
                 "websiteUrl", 
                 "createdAt", 

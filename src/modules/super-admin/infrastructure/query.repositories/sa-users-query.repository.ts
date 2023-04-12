@@ -27,8 +27,8 @@ export class SaUsersQueryRepository {
     const sql = format(
       `SELECT
                 "Users"."id",
-                "login", 
-                "email", 
+                "login" COLLATE "POSIX", 
+                "email" COLLATE "POSIX", 
                 "createdAt", 
                 "isBanned",
                 "banDate",

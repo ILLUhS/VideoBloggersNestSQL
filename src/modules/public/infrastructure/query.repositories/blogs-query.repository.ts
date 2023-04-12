@@ -17,7 +17,7 @@ export class BlogsQueryRepository {
     const sql = format(
       `SELECT
                 "Blogs"."id",
-                "name",
+                "name" COLLATE "POSIX",
                 "description",
                 "websiteUrl",
                 "Blogs"."createdAt",
@@ -29,7 +29,7 @@ export class BlogsQueryRepository {
                 %6$s
                 AND "name" ~* %1$L
                 AND "Blogs"."isBanned" IS FALSE 
-                ORDER BY "Blogs".%4$I %5$s
+                ORDER BY %4$I %5$s
                 LIMIT %2$L OFFSET %3$L;`,
       searchParams.searchNameTerm,
       searchParams.pageSize,
