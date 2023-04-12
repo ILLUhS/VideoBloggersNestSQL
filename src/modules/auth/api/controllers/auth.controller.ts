@@ -34,7 +34,7 @@ import { DeleteSessionCommand } from '../../application/use-cases/security-devic
 import { PassRecoveryCommand } from '../../application/use-cases/auth/commands/pass-recovery.command';
 import { NewPassCommand } from '../../application/use-cases/auth/commands/new-pass.command';
 
-//@SkipThrottle()
+@SkipThrottle()
 @Controller('auth')
 export class AuthController {
   constructor(

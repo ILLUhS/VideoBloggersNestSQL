@@ -18,7 +18,7 @@ import { RefreshAuthGuard } from './guards/refresh-auth.guard';
 import { DeleteSessionsExcludeCurrentCommand } from '../../application/use-cases/security-devices/commands/delete-sessions-exclude-current.command';
 import { DeleteSessionCommand } from '../../application/use-cases/security-devices/commands/delete-session.command';
 
-//@SkipThrottle()
+@SkipThrottle()
 @Controller('/security/devices')
 export class SecurityDevicesController {
   constructor(
