@@ -76,7 +76,7 @@ export class CommentsController {
     @Body() likeStatusInputDto: LikeStatusInputDto,
     @Req() req: RequestWithUser,
   ) {
-    await delay(1000);
+    setTimeout(() => '', 1000);
     return await this.commandBus.execute(
       new CreateLikeDislikeForCommentCommand({
         userId: req.user.userId,
