@@ -26,6 +26,10 @@ import { DeleteCommentCommand } from '../../application/use-cases/commenst/comma
 import { CreateLikeDislikeForCommentCommand } from '../../application/use-cases/reactions/commands/create-like-dislike-for-comment.command';
 import { IntTransformPipe } from '../pipes/int-transform.pipe';
 
+export function delay(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 @SkipThrottle()
 @Controller('comments')
 export class CommentsController {
@@ -72,6 +76,7 @@ export class CommentsController {
     @Body() likeStatusInputDto: LikeStatusInputDto,
     @Req() req: RequestWithUser,
   ) {
+    await delay(1000);
     return await this.commandBus.execute(
       new CreateLikeDislikeForCommentCommand({
         userId: req.user.userId,

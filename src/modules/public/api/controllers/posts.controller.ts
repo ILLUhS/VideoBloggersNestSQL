@@ -27,6 +27,7 @@ import { CreateCommentCommand } from '../../application/use-cases/commenst/comma
 import { BearerAuthGuard } from '../../../auth/api/controllers/guards/bearer-auth.guard';
 import { IntTransformPipe } from '../pipes/int-transform.pipe';
 import { CreateLikeDislikeForPostCommand } from '../../application/use-cases/reactions/commands/create-like-dislike-for-post.command';
+import { delay } from './comments.controller';
 
 @SkipThrottle()
 @Controller('posts')
@@ -109,6 +110,7 @@ export class PostsController {
     @Body() likeStatusInputDto: LikeStatusInputDto,
     @Req() req: RequestWithUser,
   ) {
+    await delay(1000);
     return await this.commandBus.execute(
       new CreateLikeDislikeForPostCommand({
         userId: req.user.userId,
