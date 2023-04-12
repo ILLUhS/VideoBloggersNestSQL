@@ -129,9 +129,9 @@ export class PostsQueryRepository {
                     SELECT 
                         "LikeForPost"."reaction",
                         "LikeForPost"."postId",
+                        "LikeForPost"."createdAt",
                         "Users"."id",
-                        "Users"."login",
-                        "Users"."createdAt"
+                        "Users"."login"
                     FROM public."LikeForPost"
                     JOIN "Users" ON "LikeForPost"."userId" = "Users"."id" 
                         AND "Users"."isBanned" IS FALSE) as l

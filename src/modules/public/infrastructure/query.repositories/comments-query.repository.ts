@@ -55,9 +55,9 @@ export class CommentsQueryRepository {
                     SELECT
                         "LikeForComment"."reaction",
                         "LikeForComment"."commentId",
+                        "LikeForComment"."createdAt",
                         "Users"."id",
-                        "Users"."login",
-                        "Users"."createdAt"
+                        "Users"."login"
                     FROM public."LikeForComment"
                     JOIN "Users" ON "LikeForComment"."userId" = "Users"."id"
                         AND "Users"."isBanned" IS FALSE) as l
