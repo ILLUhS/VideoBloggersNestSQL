@@ -10,6 +10,7 @@ import {
 } from 'typeorm';
 import { Blog } from './blog.entity';
 import { Comment } from './comment.entity';
+import { LikeForPost } from './like-for-post.schema';
 
 @Entity()
 export class Post {
@@ -44,6 +45,9 @@ export class Post {
 
   @OneToMany(() => Comment, (comment) => comment.post)
   comments: Comment[];
+
+  @OneToMany(() => LikeForPost, (like) => like.post)
+  likes: LikeForPost[];
 
   updateProperties(postDto: PostUpdateDto) {
     this.title = postDto.title;
