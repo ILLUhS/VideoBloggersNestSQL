@@ -3,7 +3,7 @@ import { CreateLikeDislikeForCommentCommand } from './commands/create-like-disli
 import { LikeForCommentRepository } from '../../../infrastructure/repositories/like-for-comment.repository';
 import { CommentsRepository } from '../../../infrastructure/repositories/comments.repository';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
-import { LikeForComment } from '../../../../../domain/entities/like-for-comment.schema';
+import { LikeForComment } from '../../../../../domain/entities/like-for-comment.entity';
 
 @CommandHandler(CreateLikeDislikeForCommentCommand)
 export class CreateLikeDislikeForCommentUseCase

@@ -1,7 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 import { add } from 'date-fns';
 import { UserCreateDtoType } from '../../modules/public/application/types/user.create.dto.type';
-import { Injectable } from '@nestjs/common';
 import { FoundUserDtoType } from '../../modules/auth/types/found-user-dto.type';
 import {
   Column,
@@ -14,7 +13,6 @@ import {
 import { PasswordRecovery } from './password-recovery.entity';
 import { Blog } from './blog.entity';
 
-@Injectable()
 @Entity()
 export class User {
   constructor(private userDto: UserCreateDtoType) {

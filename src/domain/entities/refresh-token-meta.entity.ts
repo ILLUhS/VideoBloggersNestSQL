@@ -4,7 +4,7 @@ import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class RefreshTokenMeta {
-  constructor(refreshTokenMetaDto: RefreshTokenMetaCreateDtoType) {
+  constructor(private refreshTokenMetaDto: RefreshTokenMetaCreateDtoType) {
     this.issuedAt = refreshTokenMetaDto.issuedAt;
     this.expirationAt = refreshTokenMetaDto.expirationAt;
     this.deviceId = refreshTokenMetaDto.deviceId;

@@ -10,7 +10,7 @@ import {
 } from 'typeorm';
 import { Blog } from './blog.entity';
 import { Comment } from './comment.entity';
-import { LikeForPost } from './like-for-post.schema';
+import { LikeForPost } from './like-for-post.entity';
 
 @Entity()
 export class Post {

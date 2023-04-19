@@ -10,6 +10,15 @@ import { BloggerModule } from './modules/blogger/blogger.module';
 import { PublicModule } from './modules/public/public.module';
 import { AppService } from './application/services/app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { LikeForComment } from './domain/entities/like-for-comment.entity';
+import { User } from './domain/entities/user.entity';
+import { RefreshTokenMeta } from './domain/entities/refresh-token-meta.entity';
+import { PasswordRecovery } from './domain/entities/password-recovery.entity';
+import { Blog } from './domain/entities/blog.entity';
+import { LikeForPost } from './domain/entities/like-for-post.entity';
+import { Post } from './domain/entities/post.entity';
+import { BannedUserForBlog } from './domain/entities/banned-user-for-blog.entity';
+import { Comment } from './domain/entities/comment.entity';
 
 @Module({
   imports: [
@@ -34,7 +43,18 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       username: process.env.PGUSER_THIN,
       password: process.env.PGPASSWORD_THIN,
       database: process.env.PGDATABASE_THIN,*/
-      entities: [],
+      entitySkipConstructor: true,
+      entities: [
+        User,
+        RefreshTokenMeta,
+        PasswordRecovery,
+        Blog,
+        Post,
+        LikeForPost,
+        Comment,
+        LikeForComment,
+        BannedUserForBlog,
+      ],
       autoLoadEntities: true,
       synchronize: true,
       ssl: true,

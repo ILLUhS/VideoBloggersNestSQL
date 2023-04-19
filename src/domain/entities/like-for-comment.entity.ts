@@ -1,19 +1,23 @@
-import { ReactionForPostCreateDtoType } from '../../modules/public/application/types/reaction-for-post-create-dto.type';
+import { ReactionForCommentCreateDtoType } from '../../modules/public/application/types/reaction-for-comment-create-dto.type';
 import { Column, Entity, ManyToOne, PrimaryColumn } from 'typeorm';
-import { Reaction } from './like-for-comment.schema';
-import { Post } from './post.entity';
+import { Comment } from './comment.entity';
 
+export enum Reaction {
+  NONE = 'None',
+  LIKE = 'Like',
+  DISLIKE = 'Dislike',
+}
 @Entity()
-export class LikeForPost {
-  constructor(likeDto: ReactionForPostCreateDtoType) {
-    this.postId = likeDto.postId;
+export class LikeForComment {
+  constructor(private likeDto: ReactionForCommentCreateDtoType) {
+    this.commentId = likeDto.commentId;
     this.userId = likeDto.userId;
     this.reaction = likeDto.reaction;
     this.createdAt = new Date();
   }
 
   @PrimaryColumn()
-  postId: number;
+  commentId: number;
 
   @PrimaryColumn()
   userId: number;
@@ -28,8 +32,8 @@ export class LikeForPost {
   @Column()
   createdAt: Date;
 
-  @ManyToOne(() => Post, (post) => post.likes)
-  post: Post;
+  @ManyToOne(() => Comment, (comment) => comment.likes)
+  comment: Comment;
   async setCreatedAt(createdAt: Date): Promise<void> {
     this.createdAt = createdAt;
   }

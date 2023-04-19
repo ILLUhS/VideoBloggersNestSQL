@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
-import { LikeForPost } from '../../../../domain/entities/like-for-post.schema';
+import { LikeForPost } from '../../../../domain/entities/like-for-post.entity';
 
 @Injectable()
 export class LikeForPostRepository {

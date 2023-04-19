@@ -8,11 +8,11 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Post } from './post.entity';
-import { LikeForComment } from './like-for-comment.schema';
+import { LikeForComment } from './like-for-comment.entity';
 
 @Entity()
 export class Comment {
-  constructor(commentDto: CommentCreateDtoType) {
+  constructor(private commentDto: CommentCreateDtoType) {
     this.content = commentDto.content;
     this.postId = commentDto.postId;
     this.userId = commentDto.userId;
