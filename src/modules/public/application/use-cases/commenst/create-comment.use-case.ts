@@ -4,7 +4,7 @@ import { CommentsRepository } from '../../../infrastructure/repositories/comment
 import { ForbiddenException, NotFoundException } from '@nestjs/common';
 import { PostsRepository } from '../../../infrastructure/repositories/posts.repository';
 import { BannedUserForBlogRepository } from '../../../infrastructure/repositories/banned-user-for-blog.repository';
-import { Comment } from '../../../../../domain/entities/comment.schema';
+import { Comment } from '../../../../../domain/entities/comment.entity';
 
 @CommandHandler(CreateCommentCommand)
 export class CreateCommentUseCase

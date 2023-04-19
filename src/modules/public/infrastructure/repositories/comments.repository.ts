@@ -1,4 +1,4 @@
-import { Comment } from '../../../../domain/entities/comment.schema';
+import { Comment } from '../../../../domain/entities/comment.entity';
 import { Injectable } from '@nestjs/common';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';

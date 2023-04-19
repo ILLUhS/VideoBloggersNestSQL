@@ -1,8 +1,15 @@
 import { PostUpdateDto } from '../../modules/public/application/types/post.update.dto';
 import { FoundPostDtoType } from '../../modules/public/types/found-post-dto.type';
 import { PostCreateDtoType } from '../../modules/public/types/post-create-dto.type';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { Blog } from './blog.entity';
+import { Comment } from './comment.entity';
 
 @Entity()
 export class Post {
@@ -34,6 +41,9 @@ export class Post {
 
   @ManyToOne(() => Blog, (blog) => blog.posts)
   blog: Blog;
+
+  @OneToMany(() => Comment, (comment) => comment.post)
+  comments: Comment[];
 
   updateProperties(postDto: PostUpdateDto) {
     this.title = postDto.title;
