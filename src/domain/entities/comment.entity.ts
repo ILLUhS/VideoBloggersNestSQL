@@ -1,7 +1,14 @@
 import { CommentCreateDtoType } from '../../modules/public/application/types/comment.create.dto.type';
 import { FoundCommentDtoType } from '../../modules/public/types/found-comment-dto.type';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { Post } from './post.entity';
+import { LikeForComment } from './like-for-comment.schema';
 
 @Entity()
 export class Comment {
@@ -29,6 +36,9 @@ export class Comment {
 
   @ManyToOne(() => Post, (post) => post.comments)
   post: Post;
+
+  @OneToMany(() => LikeForComment, (like) => like.comment)
+  likes: LikeForComment[];
 
   async setContent(content: string) {
     this.content = content;
