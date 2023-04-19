@@ -1,5 +1,5 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { User } from '../../../../../domain/schemas/user.schema';
+import { User } from '../../../../../domain/entities/user.entity';
 import { CreateUserCommand } from './commands/create-user.command';
 import * as bcrypt from 'bcrypt';
 import { UsersRepository } from '../../../../auth/ifrastructure/repositories/users.repository';

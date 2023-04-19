@@ -3,7 +3,7 @@ import { CreateLikeDislikeForPostCommand } from './commands/create-like-dislike-
 import { PostsRepository } from '../../../infrastructure/repositories/posts.repository';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { LikeForPostRepository } from '../../../infrastructure/repositories/like-for-post.repository';
-import { LikeForPost } from '../../../../../domain/schemas/like-for-post.schema';
+import { LikeForPost } from '../../../../../domain/entities/like-for-post.schema';
 
 @CommandHandler(CreateLikeDislikeForPostCommand)
 export class CreateLikeDislikeForPostUseCase

@@ -3,8 +3,19 @@ import { add } from 'date-fns';
 import { UserCreateDtoType } from '../../modules/public/application/types/user.create.dto.type';
 import { Injectable } from '@nestjs/common';
 import { FoundUserDtoType } from '../../modules/auth/types/found-user-dto.type';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  OneToMany,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { PasswordRecovery } from './password-recovery.schema';
+import { Blog } from './blog.schema';
 
 @Injectable()
+@Entity()
 export class User {
   constructor(private userDto: UserCreateDtoType) {
     this.login = userDto.login;
@@ -16,17 +27,46 @@ export class User {
     this.emailIsConfirmed = false;
     this.isBanned = false;
   }
+
+  @PrimaryGeneratedColumn()
   id: number;
+
+  @Column()
   login: string;
+
+  @Column()
   passwordHash: string;
+
+  @Column()
   email: string;
+
+  @Column()
   createdAt: string;
+
+  @Column()
   emailConfirmationCode: string;
+
+  @Column()
   emailExpirationTime: Date;
+
+  @Column()
   emailIsConfirmed: boolean;
+
+  @Column()
   isBanned: boolean;
+
+  @Column()
   banDate: string;
+
+  @Column()
   banReason: string;
+
+  @OneToOne(() => PasswordRecovery)
+  @JoinColumn()
+  passRecovery: PasswordRecovery;
+
+  @OneToMany(() => Blog, (blog) => blog.user)
+  blogs: Blog[];
 
   async confirmEmail(): Promise<boolean> {
     if (

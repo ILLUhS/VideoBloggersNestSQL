@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
-import { LikeForComment } from '../../../../domain/schemas/like-for-comment.schema';
+import { LikeForComment } from '../../../../domain/entities/like-for-comment.schema';
 
 @Injectable()
 export class LikeForCommentRepository {

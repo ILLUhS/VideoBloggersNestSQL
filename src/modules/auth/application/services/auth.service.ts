@@ -3,10 +3,10 @@ import { JwtService } from '@nestjs/jwt';
 import { v4 as uuidv4 } from 'uuid';
 import * as bcrypt from 'bcrypt';
 import { RefreshTokenMetasRepository } from '../../ifrastructure/repositories/refresh.token.metas.repository';
-import { User } from '../../../../domain/schemas/user.schema';
+import { User } from '../../../../domain/entities/user.entity';
 import { MailerService } from '@nestjs-modules/mailer';
 import { PasswordRecoveriesRepository } from '../../ifrastructure/repositories/password-recoveries.repository';
-import { PasswordRecovery } from '../../../../domain/schemas/password-recovery.schema';
+import { PasswordRecovery } from '../../../../domain/entities/password-recovery.schema';
 import { UsersRepository } from '../../ifrastructure/repositories/users.repository';
 
 @Injectable()

@@ -1,4 +1,4 @@
-import { PasswordRecovery } from '../../../../domain/schemas/password-recovery.schema';
+import { PasswordRecovery } from '../../../../domain/entities/password-recovery.schema';
 import { Injectable } from '@nestjs/common';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';

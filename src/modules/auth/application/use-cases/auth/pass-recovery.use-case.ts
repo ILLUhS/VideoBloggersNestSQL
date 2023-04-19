@@ -3,7 +3,7 @@ import { PassRecoveryCommand } from './commands/pass-recovery.command';
 import { UsersRepository } from '../../../ifrastructure/repositories/users.repository';
 import { PasswordRecoveriesRepository } from '../../../ifrastructure/repositories/password-recoveries.repository';
 import { AuthService } from '../../services/auth.service';
-import { PasswordRecovery } from '../../../../../domain/schemas/password-recovery.schema';
+import { PasswordRecovery } from '../../../../../domain/entities/password-recovery.schema';
 
 @CommandHandler(PassRecoveryCommand)
 export class PassRecoveryUseCase

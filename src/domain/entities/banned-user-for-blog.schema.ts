@@ -1,4 +1,6 @@
 import { BanUserForBlogDtoType } from '../../modules/blogger/types/ban-user-for-blog-dto.type';
+import { Column, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Blog } from './blog.schema';
 
 export class BannedUserForBlog {
   constructor(blogId: number, userId: number) {
@@ -6,12 +8,28 @@ export class BannedUserForBlog {
     this.userId = userId;
     this.isBanned = false;
   }
+
+  @PrimaryGeneratedColumn()
   id: number;
+
+  @Column()
   blogId: number;
+
+  @Column()
   userId: number;
+
+  @Column()
   isBanned: boolean;
+
+  @Column()
   banDate: string;
+
+  @Column()
   banReason: string;
+
+  @ManyToOne(() => Blog, (blog) => blog.bannedUsers)
+  blog: Blog;
+
   banUser(banReason: string) {
     this.isBanned = true;
     this.banDate = new Date().toISOString();

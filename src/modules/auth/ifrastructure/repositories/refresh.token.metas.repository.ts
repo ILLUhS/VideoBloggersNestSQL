@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { RefreshTokenMeta } from '../../../../domain/schemas/refresh-token-meta.schema';
+import { RefreshTokenMeta } from '../../../../domain/entities/refresh-token-meta.schema';
 import { RefreshTokenMetaCreateDtoType } from '../../types/refresh-token-meta-create-dto.type';
 import { DataSource } from 'typeorm';
 

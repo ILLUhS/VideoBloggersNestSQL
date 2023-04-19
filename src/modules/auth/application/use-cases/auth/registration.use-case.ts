@@ -2,7 +2,7 @@ import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { RegistrationCommand } from './commands/registration.command';
 import { AuthService } from '../../services/auth.service';
 import { UsersRepository } from '../../../ifrastructure/repositories/users.repository';
-import { User } from '../../../../../domain/schemas/user.schema';
+import { User } from '../../../../../domain/entities/user.entity';
 
 @CommandHandler(RegistrationCommand)
 export class RegistrationUseCase
