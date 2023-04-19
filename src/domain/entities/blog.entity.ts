@@ -10,6 +10,7 @@ import {
 } from 'typeorm';
 import { User } from './user.entity';
 import { BannedUserForBlog } from './banned-user-for-blog.entity';
+import { Post } from './post.entity';
 
 @Entity()
 export class Blog {
@@ -55,6 +56,9 @@ export class Blog {
 
   @OneToMany(() => BannedUserForBlog, (bannedUser) => bannedUser.blog)
   bannedUsers: BannedUserForBlog[];
+
+  @OneToMany(() => Post, (post) => post.blog)
+  posts: Post[];
 
   updateProperties(blogDto: BlogUpdateDto) {
     this.name = blogDto.name;

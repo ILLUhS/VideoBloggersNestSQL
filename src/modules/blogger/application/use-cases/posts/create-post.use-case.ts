@@ -1,6 +1,6 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { CreatePostCommand } from './commands/create-post.command';
-import { Post } from '../../../../../domain/entities/post.schema';
+import { Post } from '../../../../../domain/entities/post.entity';
 import { NotFoundException } from '@nestjs/common';
 import { PostsRepository } from '../../../../public/infrastructure/repositories/posts.repository';
 import { BlogsRepository } from '../../../../public/infrastructure/repositories/blogs.repository';

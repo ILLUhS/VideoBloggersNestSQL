@@ -1,7 +1,10 @@
 import { PostUpdateDto } from '../../modules/public/application/types/post.update.dto';
 import { FoundPostDtoType } from '../../modules/public/types/found-post-dto.type';
 import { PostCreateDtoType } from '../../modules/public/types/post-create-dto.type';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Blog } from './blog.entity';
 
+@Entity()
 export class Post {
   constructor(private postDto: PostCreateDtoType) {
     this.title = postDto.title;
@@ -10,12 +13,27 @@ export class Post {
     this.blogId = postDto.blogId;
     this.createdAt = new Date().toISOString();
   }
+
+  @PrimaryGeneratedColumn()
   id: number;
+
+  @Column()
   title: string;
+
+  @Column()
   shortDescription: string;
+
+  @Column()
   content: string;
+
+  @Column()
   blogId: number;
+
+  @Column()
   createdAt: string;
+
+  @ManyToOne(() => Blog, (blog) => blog.posts)
+  blog: Blog;
 
   updateProperties(postDto: PostUpdateDto) {
     this.title = postDto.title;
