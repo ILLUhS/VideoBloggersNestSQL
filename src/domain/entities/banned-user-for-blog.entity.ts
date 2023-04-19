@@ -1,7 +1,8 @@
 import { BanUserForBlogDtoType } from '../../modules/blogger/types/ban-user-for-blog-dto.type';
-import { Column, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { Blog } from './blog.schema';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Blog } from './blog.entity';
 
+@Entity()
 export class BannedUserForBlog {
   constructor(blogId: number, userId: number) {
     this.blogId = blogId;

@@ -1,10 +1,17 @@
 import { BlogUpdateDto } from '../../modules/public/application/types/blog.update.dto';
 import { BlogCreateDtoType } from '../../modules/blogger/types/blog-create-dto.type';
 import { FoundBlogDtoType } from '../../modules/public/types/found-blog-dto.type';
-import { Column, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { User } from './user.entity';
-import { BannedUserForBlog } from './banned-user-for-blog.schema';
+import { BannedUserForBlog } from './banned-user-for-blog.entity';
 
+@Entity()
 export class Blog {
   constructor(private blogDto: BlogCreateDtoType) {
     this.name = blogDto.name;

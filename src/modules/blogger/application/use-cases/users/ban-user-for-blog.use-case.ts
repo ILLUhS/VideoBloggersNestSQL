@@ -2,7 +2,7 @@ import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { BanUserForBlogCommand } from './commands/ban-user-for-blog.command';
 import { ForbiddenException, NotFoundException } from '@nestjs/common';
 import { BannedUserForBlogRepository } from '../../../../public/infrastructure/repositories/banned-user-for-blog.repository';
-import { BannedUserForBlog } from '../../../../../domain/entities/banned-user-for-blog.schema';
+import { BannedUserForBlog } from '../../../../../domain/entities/banned-user-for-blog.entity';
 import { BlogsRepository } from '../../../../public/infrastructure/repositories/blogs.repository';
 import { UsersRepository } from '../../../../auth/ifrastructure/repositories/users.repository';
 

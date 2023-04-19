@@ -11,8 +11,8 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { PasswordRecovery } from './password-recovery.schema';
-import { Blog } from './blog.schema';
+import { PasswordRecovery } from './password-recovery.entity';
+import { Blog } from './blog.entity';
 
 @Injectable()
 @Entity()

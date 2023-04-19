@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
-import { BannedUserForBlog } from '../../../../domain/entities/banned-user-for-blog.schema';
+import { BannedUserForBlog } from '../../../../domain/entities/banned-user-for-blog.entity';
 
 @Injectable()
 export class BannedUserForBlogRepository {

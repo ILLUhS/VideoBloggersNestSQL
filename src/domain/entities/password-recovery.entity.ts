@@ -2,7 +2,9 @@ import { v4 as uuidv4 } from 'uuid';
 import { add } from 'date-fns';
 import { PassRecCreateDtoType } from '../../modules/public/application/types/passRecCreateDtoType';
 import { FoundPassRecDtoType } from '../../modules/auth/types/found-pass-rec-dto.type';
+import { Column, Entity, PrimaryColumn } from 'typeorm';
 
+@Entity()
 export class PasswordRecovery {
   constructor(private passRecDto: PassRecCreateDtoType) {
     this.userId = passRecDto.userId;
@@ -12,11 +14,23 @@ export class PasswordRecovery {
     this.isUsed = false;
     this.createdAt = new Date().toISOString();
   }
+
+  @PrimaryColumn()
   userId: number;
+
+  @Column()
   email: string;
+
+  @Column()
   recoveryCode: string;
+
+  @Column()
   expirationTime: Date;
+
+  @Column()
   isUsed: boolean;
+
+  @Column()
   createdAt: string;
 
   async recoveryConfirm(): Promise<boolean> {

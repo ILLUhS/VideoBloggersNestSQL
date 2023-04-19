@@ -6,7 +6,7 @@ import { RefreshTokenMetasRepository } from '../../ifrastructure/repositories/re
 import { User } from '../../../../domain/entities/user.entity';
 import { MailerService } from '@nestjs-modules/mailer';
 import { PasswordRecoveriesRepository } from '../../ifrastructure/repositories/password-recoveries.repository';
-import { PasswordRecovery } from '../../../../domain/entities/password-recovery.schema';
+import { PasswordRecovery } from '../../../../domain/entities/password-recovery.entity';
 import { UsersRepository } from '../../ifrastructure/repositories/users.repository';
 
 @Injectable()

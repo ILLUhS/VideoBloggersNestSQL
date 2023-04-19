@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Blog } from '../../../../domain/entities/blog.schema';
+import { Blog } from '../../../../domain/entities/blog.entity';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 
